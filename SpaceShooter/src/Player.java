@@ -7,6 +7,7 @@ public class Player extends Figur{
         super(x, y, panel);
         this.img = img;
         this.bs = bs;
+        this.setIcon(img);
         this.setBounds(x,y,img.getIconWidth(),img.getIconHeight());
     }
 
