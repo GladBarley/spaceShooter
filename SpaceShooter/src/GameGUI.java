@@ -23,6 +23,7 @@ public class GameGUI {
 
     private Timer myTimer;
     private Timer astTimer;
+    private Timer bullTimer;
 
     public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
@@ -42,6 +43,19 @@ public class GameGUI {
         });
         myTimer.setInitialDelay(100);
         myTimer.start();
+
+
+
+        bullTimer = new Timer(200, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                bullTimer_actionPerformed(e);
+            }
+        });
+        bullTimer.setInitialDelay(200);
+        bullTimer.start();
+
+
 
         astTimer = new Timer(2000, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -71,24 +85,31 @@ public class GameGUI {
     }
 
 
-    public void myTimer_ActionPerformed(ActionEvent evt) {
-        // Bewegen von Raumschiff
-        allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
-        Figur spaceship = allFigures.get(0);
-
+    public void bullTimer_actionPerformed(ActionEvent evt){
         if(Spacebar){
             // get Bullet Image
+            Figur spaceship = allFigures.get(0);
             ImageIcon bullImg = new ImageIcon("src/img/Ships/Missile1.png");
-
-
-            Bullet bull1 = new Bullet(spaceship.getX(), spaceship.getY(),bullImg,gamePanel,2);
+            Bullet bull1 = new Bullet(spaceship.getX(), spaceship.getY(),bullImg,gamePanel,4);
             allBullets.add(bull1);
             gamePanel.add(bull1);
         }
+    }
+
+    public void myTimer_ActionPerformed(ActionEvent evt) {
+        // Bewegen von Raumschiff
+        allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
+
+
+
 
         // alle Figuren (außer Jake) bewegen
         for (int i=1; i<allFigures.size(); i++){
             allFigures.get(i).move();
+        }
+
+        for(int i=0; i < allBullets.size();i++){
+            allBullets.get(i).move();
         }
 
         // hier muss auf Kollision mit Boden geprüft werden

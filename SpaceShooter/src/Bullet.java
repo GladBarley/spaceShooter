@@ -2,18 +2,18 @@ import javax.swing.*;
 
 
 public class Bullet extends Figur{
-    protected int bs;
-    protected int x;
-    protected int y;
-    public Bullet(int x, int y, ImageIcon img, JPanel panel, int bs){
+    protected int speed;
+    protected ImageIcon img;
+    public Bullet(int x, int y, ImageIcon img, JPanel panel, int speed){
         super(x,y,panel);
-        this.x = x;
-        this.y = y;
-        this.bs = bs;
+        this.speed = speed;
+        this.img = img;
+        this.setIcon(img);
         this.setBounds(x,y,img.getIconWidth(),img.getIconHeight());
     }
 
-    public void shoot(){
-        y =- bs;
+    public void move() {
+        y = y - speed;
+
     }
 }
