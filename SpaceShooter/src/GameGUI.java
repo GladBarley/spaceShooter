@@ -1,6 +1,7 @@
 
 
 import com.sun.org.apache.bcel.internal.generic.IADD;
+import java.util.ArrayList;
 
 import javax.swing.*;
 import java.awt.event.*;
@@ -11,11 +12,10 @@ public class GameGUI {
 
     private int maxAsteroids = 8;
     private int maxBullets = 30;
-    private Asteroid[] allAsteroids = new asteroids[maxFiguren]; // [0] - Raumschiff; [1..max] - Asteroiden
-    private Bullet[] allBullets = new Bullet[maxBullets];
+     // [0] - Raumschiff; [1..max] - Asteroiden
+    ArrayList<Asteroid> allAsteroids = new ArrayList<Asteroid>();
+    ArrayList<Bullet> allBullets = new ArrayList<Bullet>();
 
-    int anzAsteroids = 0;
-    int anzBullets = 0;
 
     private static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
 
@@ -38,15 +38,25 @@ public class GameGUI {
         myTimer.start();
         astTimer = new Timer(2000, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                if (anzFiguren < maxFiguren) {
-                    int z = (int) (Math.random()*4);
-                    ImageIcon icon1 = new ImageIcon("src/FlummisJakeJaeger/images/smile" + z + ".png");
+                if (allAsteroids.size() < maxFiguren) {
+                    int x = (int) (Math.random()*4);
+
+                    int max = gamePanel.getWidth();
+                    int min = 1;
+                    int range = max - min + 1;
+
+                    // generate random X Coordinates
+                    for (int i = 0; i < 10; i++) {
+                        int rx = (int)(Math.random() * range) + min;
+
+
+
+                    ImageIcon icon1 = new ImageIcon("src/img/Space_Background/Asteroids_Foreground.png");
                     int height = icon1.getIconHeight();
                     int width = icon1.getIconWidth();
-                    Asteroid ast1 = new Asteroid(//hier Constructor);
-                    allAsteroids[anzAsteroids] = ast1;
+                    Asteroid ast1 = new Asteroid();
+                    allAsteroids.add(ast1);
                     gamePanel.add(ast1);
-                    anzAsteroids++;
                 }
             }
         });
@@ -56,15 +66,15 @@ public class GameGUI {
 
     public void myTimer_ActionPerformed(ActionEvent evt) {
         // Bewegen von Raumschiff
-        allAsteroids[0].move(keyLeft,keyRight,keyUp,keyDown);
+        allAsteroids.get(0).move(keyLeft,keyRight,keyUp,keyDown);
         // alle Figuren (außer Jake) bewegen
         for (int i=1; i<anzAsteroids; i++){
-            allAsteroids[i].move();
+            allAsteroids.get(i).move();
         }
 
         // hier muss auf Kollision mit Boden geprüft werden
         for (int i = 1; i < anzAsteroids; i++) {
-            if (allAsteroids[i].getY() < 10) {
+            if (allAsteroids.get(0).getY() < 10) {
                 myTimer.stop();
                 astTimer.stop();
             }
