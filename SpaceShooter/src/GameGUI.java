@@ -1,20 +1,22 @@
 
 
-import com.sun.org.apache.bcel.internal.generic.IADD;
+
+import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import java.awt.event.*;
 
 public class GameGUI {
+
     private JPanel mainPanel;
     private JPanel gamePanel;
 
-    private int maxAsteroids = 8;
+    private int maxFiguren = 8;
     private int maxBullets = 30;
      // [0] - Raumschiff; [1..max] - Asteroiden
-    ArrayList<Figur> allFigures = new ArrayList<Asteroid>();
-    ArrayList<Figur> allBullets = new ArrayList<Bullet>();
+    ArrayList<Figur> allFigures = new ArrayList<Figur>();
+    ArrayList<Bullet> allBullets = new ArrayList<Bullet>();
 
 
     private static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
@@ -23,11 +25,15 @@ public class GameGUI {
     private Timer astTimer;
 
     public GameGUI() {
-        gamePanel.setBounds(0,0,800,600);
+        gamePanel.setBounds(0, 0, 800, 600);
         gamePanel.setLayout(null);
 
-        // Raumschiff laden
 
+        // Raumschiff laden (Eventuell hier ein Kommentar, um den Ladeprozess zu beschreiben)
+        ImageIcon imgs = new ImageIcon("src/img/Ships/spaceship1.png");
+        Player spaceship = new Player(400,300,gamePanel,imgs,3);
+        allFigures.add(spaceship);
+        gamePanel.add(spaceship);
         // Timer
         myTimer = new Timer(10, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
@@ -36,10 +42,11 @@ public class GameGUI {
         });
         myTimer.setInitialDelay(100);
         myTimer.start();
+
         astTimer = new Timer(2000, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 if (allFigures.size() < maxFiguren) {
-                    int x = (int) (Math.random()*4);
+                    int x = (int) (Math.random() * 4);
 
                     int max = gamePanel.getWidth();
                     int min = 1;
@@ -47,16 +54,15 @@ public class GameGUI {
 
                     // generate random X Coordinates
                     for (int i = 0; i < 10; i++) {
-                        int rx = (int)(Math.random() * range) + min;
+                        int rx = (int) (Math.random() * range) + min;
 
-
-
-                    ImageIcon icon1 = new ImageIcon("src/img/Space_Background/Asteroids_Foreground.png");
-                    int height = icon1.getIconHeight();
-                    int width = icon1.getIconWidth();
-                    Asteroid ast1 = new Asteroid();
-                    allFigures.add(ast1);
-                    gamePanel.add(ast1);
+                        ImageIcon icon1 = new ImageIcon("src/img/Space_Background/Asteroids_Foreground.png");
+                        int height = icon1.getIconHeight();
+                        int width = icon1.getIconWidth();
+                        Asteroid ast1 = new Asteroid(rx,0,gamePanel,icon1,2);
+                        allFigures.add(ast1);
+                        gamePanel.add(ast1);
+                    }
                 }
             }
         });
@@ -64,16 +70,18 @@ public class GameGUI {
         astTimer.start();
     }
 
+
     public void myTimer_ActionPerformed(ActionEvent evt) {
         // Bewegen von Raumschiff
         allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
+        Figur spaceship = allFigures.get(0);
 
         if(Spacebar){
             // get Bullet Image
-            ImageIcon bullImg = new ImageIcon()
+            ImageIcon bullImg = new ImageIcon("src/img/Ships/Missile1.png");
 
 
-            Bullet bull1 = new Bullet();
+            Bullet bull1 = new Bullet(spaceship.getX(), spaceship.getY(),bullImg,gamePanel,2);
             allBullets.add(bull1);
             gamePanel.add(bull1);
         }
@@ -84,7 +92,7 @@ public class GameGUI {
         }
 
         // hier muss auf Kollision mit Boden geprüft werden
-        for (int i = 1; i < anzAsteroids; i++) {
+        for (int i = 1; i < allFigures.size(); i++) {
             if (allFigures.get(0).getY() < 10) {
                 myTimer.stop();
                 astTimer.stop();
@@ -102,6 +110,8 @@ public class GameGUI {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
         frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        //frame.setSize(800, 600);
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(KeyEvent event) {

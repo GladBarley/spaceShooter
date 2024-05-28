@@ -9,7 +9,7 @@ public abstract class Figur extends JLabel {
     protected int xr, yr;         // Bewegung in x- und y-Richtung
     protected ImageIcon imgIcon;      // Breite und Höhe des Bildes
 
-    public Figur(int x, int y, ImageIcon imgIcon, JPanel panel) {
+    public Figur(int x, int y, JPanel panel) {
         super();
         this.x = x;
         this.y = y;
@@ -17,10 +17,10 @@ public abstract class Figur extends JLabel {
         this.panel = panel;
         this.xr = 0;
         this.yr = 0;
-        Image image = this.imgIcon.getImage();
+        //Image image = this.imgIcon.getImage();
         //Image newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH);
-        this.imgIcon = new ImageIcon(newimg);
-        this.setBounds(x,y,this.imgIcon.getIconWidth(),this.imgIcon.getIconHeight());
+        //this.imgIcon = new ImageIcon(newimg);
+        //this.setBounds(x,y,this.imgIcon.getIconWidth(),this.imgIcon.getIconHeight());
 
     }
 
@@ -28,13 +28,13 @@ public abstract class Figur extends JLabel {
     public void move(boolean left, boolean right, boolean up, boolean down) { }
 
     // Test auf Kollision
-    public boolean istKollision(Figur aFigur) {
+    /*public boolean istKollision(Figur aFigur) {
         if ((x+w) <= aFigur.getX()) return false;
         if ((y+h) <= aFigur.getY()) return false;
         if ((aFigur.getX() + aFigur.getWidth()) <= x) return false;
         if ((aFigur.getY() + aFigur.getHeight()) <= y) return false;
         return true;
-    }
+    }*/
 
     public boolean collides(Figur figur2) {
         ImageIcon icon1 = this.imgIcon;
@@ -124,6 +124,6 @@ public abstract class Figur extends JLabel {
         return this.imgIcon;
     }
 
-    public int getWidth(){return imgIcon.getIconWidth();}
-    public int getHeight(){return imgIcon.getIconHeight();}
+    //public int getWidth(){return imgIcon.getIconWidth();}
+    //public int getHeight(){return imgIcon.getIconHeight();}
 }
