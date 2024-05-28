@@ -3,13 +3,11 @@ import javax.swing.*;
 
 public class Bullet extends Figur{
     protected int speed;
-    protected ImageIcon img;
-    public Bullet(int x, int y, ImageIcon img, JPanel panel, int speed){
-        super(x,y,panel);
+    public Bullet(int x, int y, ImageIcon imgIcon, JPanel panel, int speed){
+        super(x,y,panel, imgIcon);
         this.speed = speed;
-        this.img = img;
-        this.setIcon(img);
-        this.setBounds(x,y,img.getIconWidth(),img.getIconHeight());
+        this.setIcon(imgIcon);
+        this.setBounds(x,y,imgIcon.getIconWidth(),imgIcon.getIconHeight());
     }
 
     public void move() {

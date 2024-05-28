@@ -31,11 +31,12 @@ public class GameGUI {
 
 
         // Raumschiff laden
-        ImageIcon imgs = new ImageIcon("src/img/Ships/spaceship1.png");
+        ImageIcon imgs = new ImageIcon(getClass().getResource("/img/Ships/spaceship1.png") );
         Player spaceship = new Player(400,300,gamePanel,imgs,3);
         allFigures.add(spaceship);
         gamePanel.add(spaceship);
-
+        System.out.println(imgs.getIconHeight());
+        System.out.println(imgs.getIconWidth());
 
         // General Timer
         myTimer = new Timer(10, new ActionListener() {
@@ -72,7 +73,7 @@ public class GameGUI {
                     for (int i = 0; i < 10; i++) {
                         int rx = (int) (Math.random() * range) + min;
 
-                        ImageIcon icon1 = new ImageIcon("src/img/Space_Background/Asteroids_Foreground.png");
+                        ImageIcon icon1 = new ImageIcon(getClass().getResource("/img/Space_Background/Asteroids_Foreground.png"));
                         int height = icon1.getIconHeight();
                         int width = icon1.getIconWidth();
                         Asteroid ast1 = new Asteroid(rx,0,gamePanel,icon1,2);
@@ -91,7 +92,7 @@ public class GameGUI {
         if(Spacebar){
             // get Bullet Image
             Figur spaceship = allFigures.get(0);
-            ImageIcon bullImg = new ImageIcon("src/img/Ships/Missile1.png");
+            ImageIcon bullImg = new ImageIcon(getClass().getResource("/img/Ships/Missile1.png"));
             Bullet bull1 = new Bullet(spaceship.getX(), spaceship.getY(),bullImg,gamePanel,4);
             allBullets.add(bull1);
             gamePanel.add(bull1);
@@ -114,17 +115,18 @@ public class GameGUI {
             allBullets.get(i).move();
         }
 
-        // hier muss auf Kollision mit Boden geprüft werden
-        /*for (int i = 1; i < allFigures.size(); i++) {
+        //hier muss auf Kollision mit Boden geprüft werden
+        for (int i = 1; i < allFigures.size(); i++) {
             for(int e=0;e<allBullets.size();e++){
                 if(allBullets.get(e).collides(allFigures.get(i))== true){
                     myTimer.stop();
                     bullTimer.stop();
                     astTimer.stop();
+                    System.out.println("Kollision!!!");
                 }
                 ;
             }
-        }*/
+        }
 
 
 

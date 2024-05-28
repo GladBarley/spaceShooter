@@ -1,15 +1,14 @@
 import javax.swing.*;
 
 public class Player extends Figur{
-    protected ImageIcon img;
+
     protected int bs;
     protected int xr, yr;
-    public Player(int x, int y, JPanel panel, ImageIcon img, int bs) {
-        super(x, y, panel);
-        this.img = img;
+    public Player(int x, int y, JPanel panel, ImageIcon imgIcon, int bs) {
+        super(x, y, panel, imgIcon);
         this.bs = bs;
-        this.setIcon(img);
-        this.setBounds(x,y,img.getIconWidth(),img.getIconHeight());
+        this.setIcon(imgIcon);
+        this.setBounds(x,y,imgIcon.getIconWidth(),imgIcon.getIconHeight());
         xr = 0;
         yr = 0;
     }
@@ -19,8 +18,8 @@ public class Player extends Figur{
 
         int fw = panel.getWidth();
         int fh = panel.getHeight();
-        int h = img.getIconHeight();
-        int w = img.getIconWidth();
+        int h = imgIcon.getIconHeight();
+        int w = imgIcon.getIconWidth();
 
         if (left) xr--;
         if (right) xr++;
