@@ -13,8 +13,8 @@ public class GameGUI {
     private int maxAsteroids = 8;
     private int maxBullets = 30;
      // [0] - Raumschiff; [1..max] - Asteroiden
-    ArrayList<Asteroid> allAsteroids = new ArrayList<Asteroid>();
-    ArrayList<Bullet> allBullets = new ArrayList<Bullet>();
+    ArrayList<Figur> allFigures = new ArrayList<Asteroid>();
+    ArrayList<Figur> allBullets = new ArrayList<Bullet>();
 
 
     private static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
@@ -38,7 +38,7 @@ public class GameGUI {
         myTimer.start();
         astTimer = new Timer(2000, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
-                if (allAsteroids.size() < maxFiguren) {
+                if (allFigures.size() < maxFiguren) {
                     int x = (int) (Math.random()*4);
 
                     int max = gamePanel.getWidth();
@@ -55,7 +55,7 @@ public class GameGUI {
                     int height = icon1.getIconHeight();
                     int width = icon1.getIconWidth();
                     Asteroid ast1 = new Asteroid();
-                    allAsteroids.add(ast1);
+                    allFigures.add(ast1);
                     gamePanel.add(ast1);
                 }
             }
@@ -66,15 +66,26 @@ public class GameGUI {
 
     public void myTimer_ActionPerformed(ActionEvent evt) {
         // Bewegen von Raumschiff
-        allAsteroids.get(0).move(keyLeft,keyRight,keyUp,keyDown);
+        allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
+
+        if(Spacebar){
+            // get Bullet Image
+            ImageIcon bullImg = new ImageIcon()
+
+
+            Bullet bull1 = new Bullet();
+            allBullets.add(bull1);
+            gamePanel.add(bull1);
+        }
+
         // alle Figuren (außer Jake) bewegen
-        for (int i=1; i<anzAsteroids; i++){
-            allAsteroids.get(i).move();
+        for (int i=1; i<allFigures.size(); i++){
+            allFigures.get(i).move();
         }
 
         // hier muss auf Kollision mit Boden geprüft werden
         for (int i = 1; i < anzAsteroids; i++) {
-            if (allAsteroids.get(0).getY() < 10) {
+            if (allFigures.get(0).getY() < 10) {
                 myTimer.stop();
                 astTimer.stop();
             }
