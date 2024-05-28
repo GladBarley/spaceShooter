@@ -30,12 +30,14 @@ public class GameGUI {
         gamePanel.setLayout(null);
 
 
-        // Raumschiff laden (Eventuell hier ein Kommentar, um den Ladeprozess zu beschreiben)
+        // Raumschiff laden
         ImageIcon imgs = new ImageIcon("src/img/Ships/spaceship1.png");
         Player spaceship = new Player(400,300,gamePanel,imgs,3);
         allFigures.add(spaceship);
         gamePanel.add(spaceship);
-        // Timer
+
+
+        // General Timer
         myTimer = new Timer(10, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 myTimer_ActionPerformed(evt);
@@ -45,7 +47,7 @@ public class GameGUI {
         myTimer.start();
 
 
-
+        // Bullet Timer
         bullTimer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -56,7 +58,7 @@ public class GameGUI {
         bullTimer.start();
 
 
-
+        // Asteroid Timer
         astTimer = new Timer(2000, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 if (allFigures.size() < maxFiguren) {
