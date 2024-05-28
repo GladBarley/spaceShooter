@@ -115,17 +115,25 @@ public class GameGUI {
         }
 
         // hier muss auf Kollision mit Boden geprüft werden
-        for (int i = 1; i < allFigures.size(); i++) {
-            if (allFigures.get(0).getY() < 10) {
-                myTimer.stop();
-                astTimer.stop();
+        /*for (int i = 1; i < allFigures.size(); i++) {
+            for(int e=0;e<allBullets.size();e++){
+                if(allBullets.get(e).collides(allFigures.get(i))== true){
+                    myTimer.stop();
+                    bullTimer.stop();
+                    astTimer.stop();
+                }
+                ;
             }
-        }
+        }*/
+
+
 
 
 
         gamePanel.repaint();
     }
+
+
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Der wilde Space Shooter");
