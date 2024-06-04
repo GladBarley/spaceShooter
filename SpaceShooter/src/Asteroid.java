@@ -3,9 +3,11 @@ import java.awt.*;
 
 public class Asteroid extends Figur{
     protected int speed;
+    protected boolean hit;
     public Asteroid(int x, int y, JPanel panel, ImageIcon imgIcon, int speed) {
-        super(x, y, panel, imgIcon);
+        super(x, y, panel, imgIcon,false);
         this.speed = speed;
+
         this.setIcon(imgIcon);
         this.setBounds(x,y,imgIcon.getIconWidth(),imgIcon.getIconHeight());
 
@@ -14,4 +16,6 @@ public class Asteroid extends Figur{
     public void move(){
         y = y + speed;
     }
+
+
 }

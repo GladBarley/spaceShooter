@@ -5,7 +5,7 @@ public class Player extends Figur{
     protected int bs;
     protected int xr, yr;
     public Player(int x, int y, JPanel panel, ImageIcon imgIcon, int bs) {
-        super(x, y, panel, imgIcon);
+        super(x, y, panel, imgIcon,false);
         this.bs = bs;
         this.setIcon(imgIcon);
         this.setBounds(x,y,imgIcon.getIconWidth(),imgIcon.getIconHeight());

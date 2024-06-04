@@ -1,7 +1,6 @@
 
 
 
-import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -11,9 +10,14 @@ public class GameGUI {
 
     private JPanel mainPanel;
     private JPanel gamePanel;
+    private JLabel score;
 
-    private int maxFiguren = 8;
-    private int maxBullets = 30;
+
+    private final int maxFiguren = 8;
+
+    private int anzAsteroiden;
+    private int geschAst;
+
      // [0] - Raumschiff; [1..max] - Asteroiden
     ArrayList<Figur> allFigures = new ArrayList<Figur>();
     ArrayList<Bullet> allBullets = new ArrayList<Bullet>();
@@ -25,11 +29,12 @@ public class GameGUI {
 
     private static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
 
-    private Timer myTimer;
-    private Timer astTimer;
-    private Timer bullTimer;
-    private Timer exTimer;
+    private final Timer myTimer;
+    private final Timer astTimer;
+    private final Timer bullTimer;
+    private final Timer exTimer;
     private Figur delFig;
+    private int aktScore;
 
     public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
@@ -47,7 +52,7 @@ public class GameGUI {
         });
 
 
-
+        score.setText("0");
         // Raumschiff laden
         ImageIcon imgs = new ImageIcon(getClass().getResource("/img/Ships/spaceship1.png") );
         Player spaceship = new Player(400,300,gamePanel,imgs,3);
@@ -56,9 +61,8 @@ public class GameGUI {
         System.out.println(imgs.getIconHeight());
         System.out.println(imgs.getIconWidth());
 
-
-
-
+        // Asteroiden Anzahl
+        anzAsteroiden = 0;
 
 
         // General Timer
@@ -69,6 +73,7 @@ public class GameGUI {
         });
         myTimer.setInitialDelay(100);
         myTimer.start();
+
 
 
         // Bullet Timer
@@ -91,6 +96,9 @@ public class GameGUI {
                     int max = gamePanel.getWidth();
                     int min = 1;
                     int range = max - min + 1;
+                    int geschAst = Math.min(6, (int) Math.ceil(anzAsteroiden / 5.0));
+                    int delay = Math.max(1000, 2000 - (anzAsteroiden * 1000 / 30));
+                    astTimer.setDelay(delay);
 
                     // generate random X Coordinates
 
@@ -99,9 +107,10 @@ public class GameGUI {
                 ImageIcon icon1 = new ImageIcon(getClass().getResource("/img/Space_Background/Asteroids_Foreground.png"));
                 int height = icon1.getIconHeight();
                 int width = icon1.getIconWidth();
-                Asteroid ast1 = new Asteroid(rx,0,gamePanel,icon1,2);
+                    Asteroid ast1 = new Asteroid(rx, 0, gamePanel, icon1, geschAst);
                 allFigures.add(ast1);
                 gamePanel.add(ast1);
+                anzAsteroiden = anzAsteroiden +1;
 
                 }
             }
@@ -131,6 +140,11 @@ public class GameGUI {
         allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
 
 
+        // Berechnen der Geschwindigkeit der Asteroiden
+
+
+
+
 
 
         // alle Figuren (außer Jake) bewegen
@@ -147,14 +161,22 @@ public class GameGUI {
         // Kollision mit Asteroiden
         for (int i = 1; i < allFigures.size(); i++) {
             for(int e=0;e<allBullets.size();e++){
-                if(allBullets.get(e).collides(allFigures.get(i))== true){
-
-                    delFig = allFigures.get(i);
-                    // Explosion Timer
-
-
-
+                if(allBullets.get(e).collides(allFigures.get(i))){
                     ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
+
+                    if(allFigures.get(i).isHit() == false){
+                        aktScore = aktScore + 1;
+                        allFigures.get(i).setHit(true);
+                    }
+
+                    // Score
+                    score.setText(Integer.toString(aktScore));
+                    delFig = allFigures.get(i);
+
+
+
+
+                    // Asteroiden Bild ändern und Bullet löschen
                     exTimer.restart();
                     gamePanel.remove(allBullets.get(e));
                     gamePanel.remove(allFigures.get(i));
@@ -166,7 +188,6 @@ public class GameGUI {
                     System.out.println("Kollision!!!");
                     break;
                 }
-                ;
             }
         }
 
