@@ -38,29 +38,41 @@ public abstract class Figur extends JLabel {
         BufferedImage img2 = toBufferedImage(icon2.getImage());
 
         //grobe Überprüfung
-        Rectangle bounds1 = new Rectangle(0, 0, img1.getWidth(), img1.getHeight());
-        Rectangle bounds2 = new Rectangle(0, 0, img2.getWidth(), img2.getHeight());
+        Rectangle bounds1 = new Rectangle(this.x, this.y, img1.getWidth(), img1.getHeight());
+        Rectangle bounds2 = new Rectangle(figur2.getX(), figur2.getY(), img2.getWidth(), img2.getHeight());
         if (!bounds1.intersects(bounds2)) {
             return false;
         }
+        Rectangle intersection = bounds1.intersection(bounds2);
+        int difx2 = 0;
+        int difx1 = 0;
+        if (intersection.x > this.x){
+            difx1 = intersection.x - this.x;
+        }else{
+            difx2 = intersection.x - figur2.getX();
+        }
+        int dify2 = 0;
+        int dify1 = 0;
+        if(intersection.y < this.y){
+            dify1 = intersection.y - this.y;
+        }else{
+            dify2 = intersection.y - figur2.y;
+        }
+
+
+
 
         //Überprüfung pro Pixel
-        for (int x = 0; x < img1.getWidth(); x++) {
-            for (int y = 0; y < img1.getHeight(); y++) {
+        for (int x = difx1; x < difx1 + intersection.width; x++) {
+            for (int y = dify1; y < dify1 + intersection.height; y++) {
                 int pixel1 = img1.getRGB(x, y);
+                int pixel2 = img2.getRGB(difx2 + x - difx1, dify2 + y - dify1);
 
-                // Calculate the corresponding coordinates in img2
-                int x2 = x - (this.getX() - figur2.getX());
-                int y2 = y - (this.getY() - figur2.getY());
-
-                if (x2 >= 0 && x2 < img2.getWidth() && y2 >= 0 && y2 < img2.getHeight()) {
-                    int pixel2 = img2.getRGB(x2, y2);
-
-                    // Check if both pixels are non-transparent
-                    if (((pixel1 >> 24) & 0xff)!= 0 && ((pixel2 >> 24) & 0xff)!= 0) {
-                        return true;
-                    }
+                // Check if both pixels are non-transparent
+                if (((pixel1 >> 24) & 0xff)!= 0 && ((pixel2 >> 24) & 0xff)!= 0) {
+                    return true;
                 }
+
             }
         }
         return false;
