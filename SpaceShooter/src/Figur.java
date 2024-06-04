@@ -9,8 +9,9 @@ public abstract class Figur extends JLabel {
     protected int xr, yr;         // Bewegung in x- und y-Richtung
     protected ImageIcon imgIcon;   // Breite und Höhe des Bildes
     protected Rectangle[] recs = new Rectangle[1];
+    protected boolean hit;
 
-    public Figur(int x, int y, JPanel panel, ImageIcon imgIcon) {
+    public Figur(int x, int y, JPanel panel, ImageIcon imgIcon, boolean hit) {
         super();
         this.x = x;
         this.y = y;
@@ -18,6 +19,7 @@ public abstract class Figur extends JLabel {
         this.panel = panel;
         this.xr = 0;
         this.yr = 0;
+        this.hit = hit;
         this.imgIcon = imgIcon;
         //Image image = this.imgIcon.getImage();
         //Image newimg = image.getScaledInstance(120, 120,  java.awt.Image.SCALE_SMOOTH);
@@ -123,6 +125,18 @@ public abstract class Figur extends JLabel {
     public void setImgIcon(ImageIcon imgIcon){
         this.imgIcon = imgIcon;
         this.setIcon(imgIcon);
+    }
+
+
+
+    public boolean isHit() {
+        return hit;
+    }
+
+
+
+    public void setHit(boolean hit) {
+        this.hit = hit;
     }
 
     public ImageIcon getImgIcon(){
