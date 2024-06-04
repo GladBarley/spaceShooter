@@ -75,7 +75,7 @@ public class GameGUI {
         bullTimer = new Timer(200, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                bullTimer_actionPerformed(e);
+                summonBullet(e);
             }
         });
         bullTimer.setInitialDelay(200);
@@ -111,12 +111,12 @@ public class GameGUI {
     }
 
 
-    public void bullTimer_actionPerformed(ActionEvent evt){
+    public void summonBullet(ActionEvent evt){
         if(Spacebar){
             // get Bullet Image
             Figur spaceship = allFigures.get(0);
             ImageIcon bullImg = new ImageIcon(getClass().getResource("/img/Ships/Missile1.png"));
-            Bullet bull1 = new Bullet(spaceship.getX(), spaceship.getY(),bullImg,gamePanel,4);
+            Bullet bull1 = new Bullet(spaceship.getX()+(spaceship.getImgIcon().getIconWidth()/2), spaceship.getY(),bullImg,gamePanel,4);
             allBullets.add(bull1);
             gamePanel.add(bull1);
         }
