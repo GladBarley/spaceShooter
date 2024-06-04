@@ -18,16 +18,34 @@ public class GameGUI {
     ArrayList<Figur> allFigures = new ArrayList<Figur>();
     ArrayList<Bullet> allBullets = new ArrayList<Bullet>();
 
+    ArrayList<Figur> allExplosions = new ArrayList<Figur>();
+
+
+
 
     private static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
 
     private Timer myTimer;
     private Timer astTimer;
     private Timer bullTimer;
+    private Timer exTimer;
+    private Figur delFig;
 
     public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
         gamePanel.setLayout(null);
+
+
+        exTimer = new Timer(600, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gamePanel.remove(delFig);
+                allFigures.remove(delFig);
+                exTimer.stop();
+
+            }
+        });
+
 
 
         // Raumschiff laden
@@ -37,6 +55,11 @@ public class GameGUI {
         gamePanel.add(spaceship);
         System.out.println(imgs.getIconHeight());
         System.out.println(imgs.getIconWidth());
+
+
+
+
+
 
         // General Timer
         myTimer = new Timer(10, new ActionListener() {
@@ -70,16 +93,16 @@ public class GameGUI {
                     int range = max - min + 1;
 
                     // generate random X Coordinates
-                    for (int i = 0; i < 10; i++) {
-                        int rx = (int) (Math.random() * range) + min;
 
-                        ImageIcon icon1 = new ImageIcon(getClass().getResource("/img/Space_Background/Asteroids_Foreground.png"));
-                        int height = icon1.getIconHeight();
-                        int width = icon1.getIconWidth();
-                        Asteroid ast1 = new Asteroid(rx,0,gamePanel,icon1,2);
-                        allFigures.add(ast1);
-                        gamePanel.add(ast1);
-                    }
+                int rx = (int) (Math.random() * range) + min;
+
+                ImageIcon icon1 = new ImageIcon(getClass().getResource("/img/Space_Background/Asteroids_Foreground.png"));
+                int height = icon1.getIconHeight();
+                int width = icon1.getIconWidth();
+                Asteroid ast1 = new Asteroid(rx,0,gamePanel,icon1,2);
+                allFigures.add(ast1);
+                gamePanel.add(ast1);
+
                 }
             }
         });
@@ -99,6 +122,10 @@ public class GameGUI {
         }
     }
 
+
+
+
+
     public void myTimer_ActionPerformed(ActionEvent evt) {
         // Bewegen von Raumschiff
         allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
@@ -115,14 +142,29 @@ public class GameGUI {
             allBullets.get(i).move();
         }
 
-        //hier muss auf Kollision mit Boden geprüft werden
+
+
+        // Kollision mit Asteroiden
         for (int i = 1; i < allFigures.size(); i++) {
             for(int e=0;e<allBullets.size();e++){
                 if(allBullets.get(e).collides(allFigures.get(i))== true){
-                    myTimer.stop();
-                    bullTimer.stop();
-                    astTimer.stop();
+
+                    delFig = allFigures.get(i);
+                    // Explosion Timer
+
+
+
+                    ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
+                    exTimer.restart();
+                    gamePanel.remove(allBullets.get(e));
+                    gamePanel.remove(allFigures.get(i));
+                    allFigures.get(i).setImgIcon(ic);
+                    gamePanel.add(allFigures.get(i));
+                    allBullets.remove(e);
+
+
                     System.out.println("Kollision!!!");
+                    break;
                 }
                 ;
             }

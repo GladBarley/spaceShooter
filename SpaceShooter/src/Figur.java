@@ -122,6 +122,7 @@ public abstract class Figur extends JLabel {
 
     public void setImgIcon(ImageIcon imgIcon){
         this.imgIcon = imgIcon;
+        this.setIcon(imgIcon);
     }
 
     public ImageIcon getImgIcon(){
