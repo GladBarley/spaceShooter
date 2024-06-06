@@ -130,6 +130,10 @@ public class GameGUI {
     }
 
 
+    public void checkMoonCollision(Figur[] allFigures){
+        System.out.println("med");
+    }
+
     public void summonBullet(ActionEvent evt){
         if(Spacebar){
             // get Bullet Image
