@@ -18,13 +18,11 @@ public class GameGUI {
     private int anzAsteroiden;
     private int geschAst;
 
-     // [0] - Raumschiff; [1..max] - Asteroiden
+    // [0] - Raumschiff; [1..max] - Asteroiden
     ArrayList<Figur> allFigures = new ArrayList<Figur>();
     ArrayList<Bullet> allBullets = new ArrayList<Bullet>();
 
     ArrayList<Figur> allExplosions = new ArrayList<Figur>();
-
-
 
 
     private static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
@@ -54,8 +52,8 @@ public class GameGUI {
 
         score.setText("0");
         // Raumschiff laden
-        ImageIcon imgs = new ImageIcon(getClass().getResource("/img/Ships/spaceship1.png") );
-        Player spaceship = new Player(400,300,gamePanel,imgs,3);
+        ImageIcon imgs = new ImageIcon(getClass().getResource("/img/Ships/spaceship1.png"));
+        Player spaceship = new Player(400, 300, gamePanel, imgs, 3);
         allFigures.add(spaceship);
         gamePanel.add(spaceship);
         System.out.println(imgs.getIconHeight());
@@ -75,6 +73,13 @@ public class GameGUI {
         myTimer.start();
 
 
+<<<<<<< Updated upstream
+=======
+        // Mond
+        ImageIcon mIc = new ImageIcon(getClass().getResource("/img/Surface_Layer1.png"));
+        Bild moon = new Bild(0, gamePanel.getHeight() - mIc.getIconHeight(), gamePanel, mIc);
+        gamePanel.add(moon);
+>>>>>>> Stashed changes
 
         // Bullet Timer
         bullTimer = new Timer(200, new ActionListener() {
@@ -93,7 +98,11 @@ public class GameGUI {
                 if (allFigures.size() < maxFiguren) {
                     int x = (int) (Math.random() * 4);
 
+<<<<<<< Updated upstream
                     int max = gamePanel.getWidth();
+=======
+                    int max = gamePanel.getWidth() - width;
+>>>>>>> Stashed changes
                     int min = 1;
                     int range = max - min + 1;
                     int geschAst = Math.min(6, (int) Math.ceil(anzAsteroiden / 5.0));
@@ -102,15 +111,21 @@ public class GameGUI {
 
                     // generate random X Coordinates
 
+<<<<<<< Updated upstream
                 int rx = (int) (Math.random() * range) + min;
 
                 ImageIcon icon1 = new ImageIcon(getClass().getResource("/img/Space_Background/Asteroids_Foreground.png"));
                 int height = icon1.getIconHeight();
                 int width = icon1.getIconWidth();
+=======
+                    int rx = (int) (Math.random() * range) + min;
+
+
+>>>>>>> Stashed changes
                     Asteroid ast1 = new Asteroid(rx, 0, gamePanel, icon1, geschAst);
-                allFigures.add(ast1);
-                gamePanel.add(ast1);
-                anzAsteroiden = anzAsteroiden +1;
+                    allFigures.add(ast1);
+                    gamePanel.add(ast1);
+                    anzAsteroiden = anzAsteroiden + 1;
 
                 }
             }
@@ -119,6 +134,7 @@ public class GameGUI {
         astTimer.start();
     }
 
+<<<<<<< Updated upstream
     public boolean checkMoonCollision(ArrayList<Figur> allFigures){
         for(int i=0;i<allFigures.size();i++)
             if (allFigures.get(i).getY() > 550) {
@@ -126,10 +142,24 @@ public class GameGUI {
             } else {
                 return false;
             }
+=======
+    public boolean checkMoonCollision(ArrayList<Figur> allFigures) {
+        for (int i = 0; i < allFigures.size(); i++) {
+            if (allFigures.get(i).getY() < 550) {
+                return true;
+            }
+            else {return false;}
+
+        }
+>>>>>>> Stashed changes
         return false;
     }
 
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
     public void summonBullet(ActionEvent evt){
         if(Spacebar){
             // get Bullet Image
