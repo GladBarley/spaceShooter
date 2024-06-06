@@ -1,10 +1,12 @@
 
 
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
 import java.awt.event.*;
+
 
 public class GameGUI {
 
@@ -75,6 +77,10 @@ public class GameGUI {
         myTimer.start();
 
 
+        // Mond
+        ImageIcon mIc = new ImageIcon(getClass().getResource("/img/Surface_Layer1.png"));
+        Bild moon = new Bild(0,gamePanel.getHeight()-mIc.getIconHeight(),gamePanel,mIc);
+        gamePanel.add(moon);
 
         // Bullet Timer
         bullTimer = new Timer(200, new ActionListener() {
@@ -91,12 +97,17 @@ public class GameGUI {
         astTimer = new Timer(2000, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 if (allFigures.size() < maxFiguren) {
+                    ImageIcon icon1 = new ImageIcon(getClass().getResource("/img/Space_Background/Asteroids_Foreground.png"));
+                    int height = icon1.getIconHeight();
+                    int width = icon1.getIconWidth();
                     int x = (int) (Math.random() * 4);
 
-                    int max = gamePanel.getWidth();
+                    int max = gamePanel.getWidth()-width;
                     int min = 1;
                     int range = max - min + 1;
+
                     int geschAst = Math.min(6, (int) Math.ceil(anzAsteroiden / 5.0));
+
                     int delay = Math.max(1000, 2000 - (anzAsteroiden * 1000 / 30));
                     astTimer.setDelay(delay);
 
@@ -104,9 +115,8 @@ public class GameGUI {
 
                 int rx = (int) (Math.random() * range) + min;
 
-                ImageIcon icon1 = new ImageIcon(getClass().getResource("/img/Space_Background/Asteroids_Foreground.png"));
-                int height = icon1.getIconHeight();
-                int width = icon1.getIconWidth();
+
+
                     Asteroid ast1 = new Asteroid(rx, 0, gamePanel, icon1, geschAst);
                 allFigures.add(ast1);
                 gamePanel.add(ast1);
@@ -119,6 +129,10 @@ public class GameGUI {
         astTimer.start();
     }
 
+
+    public void checkMoonCollision(Figur[] allFigures){
+        System.out.println("med");
+    }
 
     public void summonBullet(ActionEvent evt){
         if(Spacebar){
@@ -171,6 +185,7 @@ public class GameGUI {
 
                     // Score
                     score.setText(Integer.toString(aktScore));
+
                     delFig = allFigures.get(i);
 
 
