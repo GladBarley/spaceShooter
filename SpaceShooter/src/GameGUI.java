@@ -119,6 +119,16 @@ public class GameGUI {
         astTimer.start();
     }
 
+    public boolean checkMoonCollision(ArrayList<Figur> allFigures){
+        for(int i=0;i<allFigures.size();i++)
+            if (allFigures.get(i).getY() > 550) {
+                return true;
+            } else {
+                return false;
+            }
+        return false;
+    }
+
 
     public void summonBullet(ActionEvent evt){
         if(Spacebar){
