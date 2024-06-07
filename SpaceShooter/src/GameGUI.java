@@ -226,18 +226,18 @@ public class GameGUI {
         frame.addKeyListener(new KeyListener() {
             @Override
             public void keyPressed(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_LEFT) keyLeft = true;
-                if (event.getKeyCode() == KeyEvent.VK_RIGHT) keyRight = true;
-                if (event.getKeyCode() == KeyEvent.VK_UP) keyUp = true;
-                if (event.getKeyCode() == KeyEvent.VK_DOWN) keyDown = true;
+                if (event.getKeyCode() == KeyEvent.VK_LEFT || event.getKeyCode() == KeyEvent.VK_A) keyLeft = true;
+                if (event.getKeyCode() == KeyEvent.VK_RIGHT || event.getKeyCode() == KeyEvent.VK_D) keyRight = true;
+                if (event.getKeyCode() == KeyEvent.VK_UP || event.getKeyCode() == KeyEvent.VK_W) keyUp = true;
+                if (event.getKeyCode() == KeyEvent.VK_DOWN || event.getKeyCode() == KeyEvent.VK_S) keyDown = true;
                 if (event.getKeyCode() == KeyEvent.VK_SPACE) Spacebar = true;
             }
             @Override
             public void keyReleased(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_LEFT) keyLeft = false;
-                if (event.getKeyCode() == KeyEvent.VK_RIGHT) keyRight = false;
-                if (event.getKeyCode() == KeyEvent.VK_UP) keyUp = false;
-                if (event.getKeyCode() == KeyEvent.VK_DOWN) keyDown = false;
+                if (event.getKeyCode() == KeyEvent.VK_LEFT || event.getKeyCode() == KeyEvent.VK_A) keyLeft = false;
+                if (event.getKeyCode() == KeyEvent.VK_RIGHT || event.getKeyCode() == KeyEvent.VK_D) keyRight = false;
+                if (event.getKeyCode() == KeyEvent.VK_UP || event.getKeyCode() == KeyEvent.VK_W) keyUp = false;
+                if (event.getKeyCode() == KeyEvent.VK_DOWN || event.getKeyCode() == KeyEvent.VK_S) keyDown = false;
                 if (event.getKeyCode() == KeyEvent.VK_SPACE) Spacebar = false;
 
             }
