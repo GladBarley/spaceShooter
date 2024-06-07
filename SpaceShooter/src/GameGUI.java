@@ -172,6 +172,7 @@ public class GameGUI {
 
 
 
+
         // Kollision mit Asteroiden
         for (int i = 1; i < allFigures.size(); i++) {
             for(int e=0;e<allBullets.size();e++){
@@ -202,7 +203,25 @@ public class GameGUI {
 
                     System.out.println("Kollision!!!");
                     break;
+
                 }
+            }
+
+            //Kollision Raumschiff
+            if(allFigures.get(0).collides(allFigures.get(i))){
+                System.out.println("TOT");
+                ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
+
+                if(!allFigures.get(i).isHit()){
+                    allFigures.get(i).setHit(true);
+                }
+                exTimer.restart();
+                gamePanel.remove(allFigures.get(i));
+                gamePanel.remove(allFigures.get(0));
+                allFigures.get(0).setImgIcon(ic);
+                gamePanel.add(allFigures.get(i));
+                allFigures.remove(0);
+                myTimer.stop();
             }
         }
 
