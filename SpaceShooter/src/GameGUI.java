@@ -7,6 +7,15 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 
 public class GameGUI {
@@ -15,12 +24,16 @@ public class GameGUI {
     private JPanel gamePanel;
     private JLabel score;
 
+
+
     Background background1;
     Background background2;
+
     private final int maxFiguren = 8;
 
     private int anzAsteroiden;
     private int geschAst;
+    private HealthBar healthBar;
 
      // [0] - Raumschiff; [1..max] - Asteroiden
     ArrayList<Figur> allFigures = new ArrayList<Figur>();
@@ -77,6 +90,10 @@ public class GameGUI {
         myTimer.setInitialDelay(100);
         myTimer.start();
 
+        // Healthbar
+        ImageIcon healthIC = new ImageIcon(getClass().getResource("img/UI/HealthBarFull.png"));
+        healthBar = new HealthBar(0,0,gamePanel,healthIC);
+        gamePanel.add(healthBar);
 
         // Mond
         ImageIcon mIc = new ImageIcon(getClass().getResource("/img/Surface_Layer1.png"));
@@ -186,10 +203,6 @@ public class GameGUI {
         }
     }
 
-
-
-
-
     public void myTimer_ActionPerformed(ActionEvent evt) {
         // Bewegen von Raumschiff
         allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
@@ -204,8 +217,6 @@ public class GameGUI {
             }
         }
 
-
-
         // alle Figuren (außer Jake) bewegen
         for (int i=1; i<allFigures.size(); i++){
             allFigures.get(i).move();
@@ -215,14 +226,13 @@ public class GameGUI {
             allBullets.get(i).move();
         }
 
-
         // Kollision mit Asteroiden
         for (int i = 1; i < allFigures.size(); i++) {
             for(int e=0;e<allBullets.size();e++){
-                if(allBullets.get(e).collides(allFigures.get(i))){
+                if(allBullets.get(e).collides(allFigures.get(i))&& !allFigures.get(i).isHit()){
                     ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
 
-                    if(allFigures.get(i).isHit() == false){
+                    if(!allFigures.get(i).isHit()){
                         aktScore = aktScore + 1;
                         allFigures.get(i).setHit(true);
                     }
@@ -232,9 +242,6 @@ public class GameGUI {
 
                     delFig = allFigures.get(i);
 
-
-
-
                     // Asteroiden Bild ändern und Bullet löschen
                     exTimer.restart();
                     gamePanel.remove(allBullets.get(e));
@@ -242,7 +249,6 @@ public class GameGUI {
                     allFigures.get(i).setImgIcon(ic);
                     gamePanel.add(allFigures.get(i));
                     allBullets.remove(e);
-
 
                     System.out.println("Kollision!!!");
                     break;
@@ -254,32 +260,46 @@ public class GameGUI {
         for(int e=1;e<allFigures.size();e++){
                 if(allFigures.get(e).collides(allFigures.get(i))){
                     ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
-
+                    delFig = allFigures.get(e);
                     if(allFigures.get(e).isHit() == false){
                         allFigures.get(e).setHit(true);
-                        myTimer.stop();
-                        exTimer.stop();
-                        astTimer.stop();
+                        if(healthBar.getCount()>=4){
+                            astTimer.stop();
+                            myTimer.stop();
+                            bullTimer.stop();
+                            exTimer.restart();
+                            gamePanel.remove(allFigures.get(e));
+                            allFigures.get(e).setImgIcon(ic);
+                            gamePanel.add(allFigures.get(e));
+                            System.out.println("Kollision!!!");
+                            break;
+                        }
+                        healthBar.setImgIcon(healthBar.delHealth());
+
+
+                        exTimer.restart();
+                        gamePanel.remove(allFigures.get(e));
+                        allFigures.get(e).setImgIcon(ic);
+                        gamePanel.add(allFigures.get(e));
+                        System.out.println("Kollision!!!");
                     }
 
-
-                    Timer gameOver;
+                    /*Timer gameOver;
                     gameOver = new Timer(400, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if(allFigures.get(0).getImgIcon() == new ImageIcon("/img/transparent.png")){
+                            if (allFigures.get(0).getImgIcon().equals(new ImageIcon("/img/transparent.png"))) {
                                 ImageIcon ic = new ImageIcon("/img/Ships/spaceship1.png");
                                 allFigures.get(0).setImgIcon(ic);
-                            } else if (allFigures.get(0).getImgIcon() == new ImageIcon("/img/Ships/spaceship1.png")) {
+                            } else if (allFigures.get(0).getImgIcon().equals(new ImageIcon("/img/Ships/spaceship1.png"))) {
                                 ImageIcon ic = new ImageIcon("/img/transparent.png");
                                 allFigures.get(0).setImgIcon(ic);
                             }
 
-
                         }
                     });
                     gameOver.setInitialDelay(200);
-                    gameOver.start();
+                    gameOver.start();*/
 
                     break;
                 }
@@ -293,8 +313,6 @@ public class GameGUI {
 
         gamePanel.repaint();
     }
-
-
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Der wilde Space Shooter");
