@@ -162,7 +162,14 @@ public class GameGUI {
         allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
 
 
-
+        // Kollision Boden
+        for(int i=1; i<allFigures.size();i++){
+            if(checkMoonCollision(allFigures)){
+                astTimer.stop();
+                exTimer.stop();
+                myTimer.stop();
+            }
+        }
 
 
 
@@ -215,25 +222,23 @@ public class GameGUI {
                 if(allFigures.get(e).collides(allFigures.get(i))){
                     ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
 
-                    if(allFigures.get(i).isHit() == false){
-                        aktScore = aktScore + 1;
-                        allFigures.get(i).setHit(true);
+                    if(allFigures.get(e).isHit() == false){
+                        allFigures.get(e).setHit(true);
+                        myTimer.stop();
+                        exTimer.stop();
+                        astTimer.stop();
                     }
 
-                    // Score
-                    score.setText(Integer.toString(aktScore));
-
-                    delFig = allFigures.get(i);
 
                     Timer gameOver;
                     gameOver = new Timer(400, new ActionListener() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            if(allFigures.get(0).getImgIcon() == new ImageIcon("")){
+                            if(allFigures.get(0).getImgIcon() == new ImageIcon("/img/transparent.png")){
                                 ImageIcon ic = new ImageIcon("/img/Ships/spaceship1.png");
                                 allFigures.get(0).setImgIcon(ic);
                             } else if (allFigures.get(0).getImgIcon() == new ImageIcon("/img/Ships/spaceship1.png")) {
-                                ImageIcon ic = new ImageIcon("");
+                                ImageIcon ic = new ImageIcon("/img/transparent.png");
                                 allFigures.get(0).setImgIcon(ic);
                             }
 
@@ -243,18 +248,6 @@ public class GameGUI {
                     gameOver.setInitialDelay(200);
                     gameOver.start();
 
-
-                    // Asteroiden Bild ändern und Bullet löschen
-
-
-                    myTimer.stop();
-                    exTimer.stop();
-                    astTimer.stop();
-
-
-
-
-                    System.out.println("Kollision!!!");
                     break;
                 }
             }
