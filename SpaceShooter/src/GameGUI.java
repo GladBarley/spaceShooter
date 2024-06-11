@@ -24,6 +24,11 @@ public class GameGUI {
     private JPanel gamePanel;
     private JLabel score;
 
+
+
+    Background background1;
+    Background background2;
+
     private final int maxFiguren = 8;
 
     private int anzAsteroiden;
@@ -44,6 +49,7 @@ public class GameGUI {
     private final Timer myTimer;
     private final Timer astTimer;
     private final Timer bullTimer;
+    private final Timer backgroundTimer;
     private final Timer exTimer;
     private Figur delFig;
     private int aktScore;
@@ -51,7 +57,6 @@ public class GameGUI {
     public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
         gamePanel.setLayout(null);
-
 
         exTimer = new Timer(600, new ActionListener() {
             @Override
@@ -62,7 +67,6 @@ public class GameGUI {
 
             }
         });
-
 
         score.setText("0");
         // Raumschiff laden
@@ -93,7 +97,7 @@ public class GameGUI {
 
         // Mond
         ImageIcon mIc = new ImageIcon(getClass().getResource("/img/Surface_Layer1.png"));
-        Bild moon = new Bild(0,gamePanel.getHeight()-mIc.getIconHeight(),gamePanel,mIc);
+        Bild moon = new Bild(0,gamePanel.getHeight()-mIc.getIconHeight()+ 10,gamePanel,mIc);
         gamePanel.add(moon);
 
         // Bullet Timer
@@ -105,6 +109,20 @@ public class GameGUI {
         });
         bullTimer.setInitialDelay(200);
         bullTimer.start();
+
+        // Hintergrund Timer
+        backgroundTimer = new Timer(300, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                background1.setY(background1.getY() + 2);
+                if(background1.getY() == 0){
+                    background2.setY(background1.getHeight()*-1);
+                }
+                background2.setY(background2.getY() + 2);
+            }
+        });
+        backgroundTimer.setInitialDelay(300);
+        backgroundTimer.start();
 
 
         // Asteroid Timer
@@ -127,20 +145,31 @@ public class GameGUI {
 
                     // generate random X Coordinates
 
-                int rx = (int) (Math.random() * range) + min;
-
-
-
+                    int rx = (int) (Math.random() * range) + min;
                     Asteroid ast1 = new Asteroid(rx, 0, gamePanel, icon1, geschAst);
-                allFigures.add(ast1);
-                gamePanel.add(ast1);
-                anzAsteroiden = anzAsteroiden +1;
+                    allFigures.add(ast1);
+                    gamePanel.add(ast1);
+                    anzAsteroiden = anzAsteroiden +1;
 
+                    //Hintergrund
+                    gamePanel.remove(background1);
+                    background1 = new Background(background1.getX(), background1.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
+                    gamePanel.add(background1);
+                    gamePanel.remove(background2);
+                    background2 = new Background(background2.getX(), background2.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
+                    gamePanel.add(background2);
                 }
             }
         });
         astTimer.setInitialDelay(100);
         astTimer.start();
+
+        //Hintergrund
+        ImageIcon backgroundimg = new ImageIcon(getClass().getResource("/img/Space_Background/Space.png"));
+        background1 = new Background(0,0, gamePanel, backgroundimg);
+        gamePanel.add(background1);
+        background2 = new Background(0,backgroundimg.getIconHeight()*-1, gamePanel, backgroundimg);
+        gamePanel.add(background2);
     }
 
 
@@ -163,6 +192,14 @@ public class GameGUI {
             Bullet bull1 = new Bullet(spaceship.getX()+(spaceship.getImgIcon().getIconWidth()/2), spaceship.getY(),bullImg,gamePanel,4);
             allBullets.add(bull1);
             gamePanel.add(bull1);
+
+            //Hintergrund
+            gamePanel.remove(background1);
+            background1 = new Background(background1.getX(), background1.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
+            gamePanel.add(background1);
+            gamePanel.remove(background2);
+            background2 = new Background(background2.getX(), background2.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
+            gamePanel.add(background2);
         }
     }
 
@@ -284,6 +321,7 @@ public class GameGUI {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        frame.setResizable(false);
         //frame.setSize(800, 600);
         frame.addKeyListener(new KeyListener() {
             @Override
