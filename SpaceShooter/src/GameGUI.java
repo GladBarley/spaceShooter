@@ -111,17 +111,29 @@ public class GameGUI {
         bullTimer.start();
 
         // Hintergrund Timer
-        backgroundTimer = new Timer(300, new ActionListener() {
+        backgroundTimer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                background1.setY(background1.getY() + 2);
-                if(background1.getY() == 0){
-                    background2.setY(background1.getHeight()*-1);
+                if(background1.getY() + 2 == -1 || background1.getY() + 2 == 0){
+                    background2.move(background1.getHeight()*-2+2);
+                }else{
+                    background2.move(2);
                 }
-                background2.setY(background2.getY() + 2);
+                if(background2.getY() + 2 == -1 || background2.getY() + 2 == 0){
+                    background1.move(background1.getHeight()*-2+2);
+                }else{
+                    background1.move(2);
+                }
+                //Hintergrund
+                gamePanel.remove(background1);
+                background1 = new Background(background1.getX(), background1.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
+                gamePanel.add(background1);
+                gamePanel.remove(background2);
+                background2 = new Background(background2.getX(), background2.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
+                gamePanel.add(background2);
             }
         });
-        backgroundTimer.setInitialDelay(300);
+        backgroundTimer.setInitialDelay(100);
         backgroundTimer.start();
 
 
@@ -150,14 +162,6 @@ public class GameGUI {
                     allFigures.add(ast1);
                     gamePanel.add(ast1);
                     anzAsteroiden = anzAsteroiden +1;
-
-                    //Hintergrund
-                    gamePanel.remove(background1);
-                    background1 = new Background(background1.getX(), background1.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
-                    gamePanel.add(background1);
-                    gamePanel.remove(background2);
-                    background2 = new Background(background2.getX(), background2.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
-                    gamePanel.add(background2);
                 }
             }
         });
@@ -193,13 +197,6 @@ public class GameGUI {
             allBullets.add(bull1);
             gamePanel.add(bull1);
 
-            //Hintergrund
-            gamePanel.remove(background1);
-            background1 = new Background(background1.getX(), background1.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
-            gamePanel.add(background1);
-            gamePanel.remove(background2);
-            background2 = new Background(background2.getX(), background2.getY(), gamePanel, new ImageIcon(getClass().getResource("/img/Space_Background/Space.png")));
-            gamePanel.add(background2);
         }
     }
 

@@ -15,8 +15,9 @@ public class Background extends JLabel {
         this.setBounds(x,y, imgIcon.getIconWidth(), imgIcon.getIconHeight());
 
     }
-    public void setY(int y) {
-        this.y = y;
+    public void move(int s) {
+        y = y + s;
+        this.setBounds(x,y, imgIcon.getIconWidth(), imgIcon.getIconHeight());
     }
 
 
