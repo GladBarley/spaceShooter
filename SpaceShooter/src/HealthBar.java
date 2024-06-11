@@ -6,65 +6,78 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
+public class HealthBar extends Figur {
+    private ImageIcon healthBar;
+    private int count;
 
-
-public class HealthBar extends Figur{
-        public HealthBar(int x, int y, JPanel panel,ImageIcon imgIcon) {
-            super(x, y, panel, imgIcon, false);
-            this.setIcon(imgIcon);
-            this.setBounds(x,y,imgIcon.getIconWidth(),imgIcon.getIconHeight());
-            ImageIcon healthBar = new ImageIcon("img/UI/HealthBar.png")
-        }
-
-    public static BufferedImage cropImage(BufferedImage src, Rectangle rect) {
-        // Bild zuschneiden
-        BufferedImage croppedImage = src.getSubimage(rect.x, rect.y, rect.width, rect.height);
-        return new BufferedImage(rect.width, rect.height, src.getType());
+    public HealthBar(int x, int y, JPanel panel, ImageIcon imgIcon) {
+        super(x, y, panel, imgIcon, false);
+        this.setIcon(imgIcon);
+        this.setBounds(x, y, imgIcon.getIconWidth(), imgIcon.getIconHeight());
+        healthBar = new ImageIcon(getClass().getResource("img/UI/HealthBar.png"));
     }
 
-    public void delHealth() {
+    public ImageIcon delHealth() {
+        BufferedImage inputImage = convertToBufferedImage(healthBar);
+        count = count +1;
+        int width = healthBar.getIconWidth();
 
-        File inpFile = 
-        BufferedImage inputImage = ImageIO.read(inpFile);
-        int width = inputImage.getWidth();
-        // Crop Bereich
-        Rectangle cropArea = new Rectangle(112, 11, width-10, 11);
+        // Crop the health bar image by 10 pixels
+        Rectangle cropArea = new Rectangle(0, 0, (width - count*27), healthBar.getIconHeight());
         BufferedImage croppedImage = cropImage(inputImage, cropArea);
 
-        // BufferedImage to ImageIcon
-        ImageIcon healthBar = new ImageIcon(croppedImage);
+        // Load the empty bar image
+        ImageIcon emptyBarIcon = new ImageIcon(getClass().getResource("img/UI/emptyBar.png"));
+        BufferedImage emptyBarImage = convertToBufferedImage(emptyBarIcon);
 
-        ImageIcon icon1 = healthBar;
-        ImageIcon icon2 = new ImageIcon("/img/UI/emptyBar.png");
-
-        // Convert ImageIcon to BufferedImage
-        BufferedImage img1 = convertToBufferedImage(icon1);
-        BufferedImage img2 = convertToBufferedImage(icon2);
-
-        // Combine the images
-        BufferedImage combinedImage = combineImages(img1, img2);
+        // Combine the cropped health bar image with the empty bar image
+        BufferedImage combinedImage = combineImages(croppedImage, emptyBarImage);
 
         // Convert the combined BufferedImage back to ImageIcon
-        ImageIcon combinedIcon = new ImageIcon(combinedImage);
+        ImageIcon completeHealthBar = new ImageIcon(combinedImage);
 
+        // Debug: Save the combined image to a file
+        saveImageToFile(combinedImage, "combinedImage.png");
+
+        return completeHealthBar;
     }
 
+    public static BufferedImage cropImage(BufferedImage src, Rectangle rect) {
+        return src.getSubimage(rect.x, rect.y, rect.width, rect.height);
+    }
 
     public static BufferedImage convertToBufferedImage(ImageIcon icon) {
-        BufferedImage bufferedImage = new BufferedImage(
+        BufferedImage bi = new BufferedImage(
                 icon.getIconWidth(),
                 icon.getIconHeight(),
                 BufferedImage.TYPE_INT_ARGB);
-        return bufferedImage;
+        ImageIcon img = new ImageIcon(icon.getImage());
+        img.paintIcon(null, bi.getGraphics(), 0, 0);
+        return bi;
     }
 
-    // Method to combine two BufferedImages
     public static BufferedImage combineImages(BufferedImage img1, BufferedImage img2) {
         int width = Math.max(img1.getWidth(), img2.getWidth());
         int height = Math.max(img1.getHeight(), img2.getHeight());
         BufferedImage combinedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        combinedImage.getGraphics().drawImage(img2, 0, 0, null);
+        combinedImage.getGraphics().drawImage(img1, 0, 0, null);
+
         return combinedImage;
     }
 
+    public static void saveImageToFile(BufferedImage image, String filePath) {
+        File output = new File(filePath);
+        try {
+            ImageIO.write(image, "png", output);
+            System.out.println("Image saved successfully.");
+        } catch (IOException e) {
+            System.err.println("Error writing image: " + e.getMessage());
+        }
+    }
+
+    public int getCount() {
+        return count;
+    }
 }
 
