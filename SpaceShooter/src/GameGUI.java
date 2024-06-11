@@ -207,13 +207,23 @@ public class GameGUI {
         // Bewegen von Raumschiff
         allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
 
-
+        ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
         // Kollision Boden
-        for(int i=1; i<allFigures.size();i++){
+        for(int e=1; e<allFigures.size();e++){
             if(checkMoonCollision(allFigures)){
-                astTimer.stop();
-                exTimer.stop();
-                myTimer.stop();
+                allFigures.get(e).setHit(true);
+                if(healthBar.getCount()>=4){
+                    astTimer.stop();
+                    myTimer.stop();
+                    bullTimer.stop();
+                    exTimer.restart();
+                    gamePanel.remove(allFigures.get(e));
+                    allFigures.get(e).setImgIcon(ic);
+                    gamePanel.add(allFigures.get(e));
+                    System.out.println("Kollision!!!");
+                    break;
+                }
+                healthBar.setImgIcon(healthBar.delHealth());
             }
         }
 
@@ -230,7 +240,6 @@ public class GameGUI {
         for (int i = 1; i < allFigures.size(); i++) {
             for(int e=0;e<allBullets.size();e++){
                 if(allBullets.get(e).collides(allFigures.get(i))&& !allFigures.get(i).isHit()){
-                    ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
 
                     if(!allFigures.get(i).isHit()){
                         aktScore = aktScore + 1;
@@ -256,10 +265,12 @@ public class GameGUI {
             }
 
         }
+
+
         int i = 0;
         for(int e=1;e<allFigures.size();e++){
                 if(allFigures.get(e).collides(allFigures.get(i))){
-                    ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
+
                     delFig = allFigures.get(e);
                     if(allFigures.get(e).isHit() == false){
                         allFigures.get(e).setHit(true);
