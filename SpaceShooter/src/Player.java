@@ -11,6 +11,7 @@ public class Player extends Figur{
         this.setBounds(x,y,imgIcon.getIconWidth(),imgIcon.getIconHeight());
         xr = 0;
         yr = 0;
+
     }
 
     public void move(boolean left,boolean right,boolean up,boolean down){

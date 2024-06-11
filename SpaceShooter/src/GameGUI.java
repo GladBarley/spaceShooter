@@ -7,6 +7,15 @@ import java.util.ArrayList;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 
 public class GameGUI {
@@ -14,6 +23,8 @@ public class GameGUI {
     private JPanel mainPanel;
     private JPanel gamePanel;
     private JLabel score;
+    Bild healthBar;
+    Bild emptyBar;
 
 
     private final int maxFiguren = 8;
@@ -76,6 +87,18 @@ public class GameGUI {
         });
         myTimer.setInitialDelay(100);
         myTimer.start();
+
+        // Health Bar
+        ImageIcon health = new ImageIcon(getClass().getResource("img/UI/HealthBar.png"));
+        Bild healthBar = new Bild(650,0,gamePanel,health);
+        gamePanel.add(healthBar);
+
+        // Empty Bar
+        ImageIcon bar = new ImageIcon(getClass().getResource("img/UI/emptyBar.png"));
+        Bild emptyBar = new Bild(650,0,gamePanel,bar);
+        gamePanel.add(emptyBar);
+
+
 
 
         // Mond
@@ -153,13 +176,17 @@ public class GameGUI {
         }
     }
 
-
-
-
-
     public void myTimer_ActionPerformed(ActionEvent evt) {
         // Bewegen von Raumschiff
         allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
+
+        // Health Bar bewegen
+        int x = allFigures.get(0).getX();
+        int y = allFigures.get(0).getY();
+        //healthBar.setY(y);
+        //healthBar.setX(x);
+        //emptyBar.setX(x);
+        //emptyBar.setY(y);
 
 
         // Kollision Boden
@@ -181,6 +208,7 @@ public class GameGUI {
         for(int i=0; i < allBullets.size();i++){
             allBullets.get(i).move();
         }
+
 
 
         // Kollision mit Asteroiden
@@ -248,6 +276,7 @@ public class GameGUI {
                     gameOver.setInitialDelay(200);
                     gameOver.start();
 
+
                     break;
                 }
             }
@@ -260,8 +289,6 @@ public class GameGUI {
 
         gamePanel.repaint();
     }
-
-
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Der wilde Space Shooter");
