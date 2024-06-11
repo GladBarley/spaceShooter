@@ -2,6 +2,7 @@
 
 
 import java.awt.*;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -57,7 +58,7 @@ public class GameGUI {
         score.setText("0");
         // Raumschiff laden
         ImageIcon imgs = new ImageIcon(getClass().getResource("/img/Ships/spaceship1.png") );
-        Player spaceship = new Player(400,300,gamePanel,imgs,3);
+        Player spaceship = new Player(400,300,gamePanel,imgs,2);
         allFigures.add(spaceship);
         gamePanel.add(spaceship);
         System.out.println(imgs.getIconHeight());
@@ -130,8 +131,15 @@ public class GameGUI {
     }
 
 
-    public void checkMoonCollision(Figur[] allFigures){
-        System.out.println("med");
+    public boolean checkMoonCollision(ArrayList<Figur> allFigures){
+        for(int i=1;i<allFigures.size();i++){
+            if(allFigures.get(i).getY()>550&& !allFigures.get(i).isHit()){
+                ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
+                allFigures.get(i).setImgIcon(ic);
+                return true;
+            }
+        }
+        return false;
     }
 
     public void summonBullet(ActionEvent evt){
@@ -154,9 +162,6 @@ public class GameGUI {
         allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
 
 
-        // Berechnen der Geschwindigkeit der Asteroiden
-
-
 
 
 
@@ -169,7 +174,6 @@ public class GameGUI {
         for(int i=0; i < allBullets.size();i++){
             allBullets.get(i).move();
         }
-
 
 
         // Kollision mit Asteroiden
@@ -204,7 +208,58 @@ public class GameGUI {
                     break;
                 }
             }
+
         }
+        int i = 0;
+        for(int e=1;e<allFigures.size();e++){
+                if(allFigures.get(e).collides(allFigures.get(i))){
+                    ImageIcon ic = new ImageIcon(getClass().getResource("/img/explosion.gif"));
+
+                    if(allFigures.get(i).isHit() == false){
+                        aktScore = aktScore + 1;
+                        allFigures.get(i).setHit(true);
+                    }
+
+                    // Score
+                    score.setText(Integer.toString(aktScore));
+
+                    delFig = allFigures.get(i);
+
+                    Timer gameOver;
+                    gameOver = new Timer(400, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            if(allFigures.get(0).getImgIcon() == new ImageIcon("")){
+                                ImageIcon ic = new ImageIcon("/img/Ships/spaceship1.png");
+                                allFigures.get(0).setImgIcon(ic);
+                            } else if (allFigures.get(0).getImgIcon() == new ImageIcon("/img/Ships/spaceship1.png")) {
+                                ImageIcon ic = new ImageIcon("");
+                                allFigures.get(0).setImgIcon(ic);
+                            }
+
+
+                        }
+                    });
+                    gameOver.setInitialDelay(200);
+                    gameOver.start();
+
+
+                    // Asteroiden Bild ändern und Bullet löschen
+
+
+                    myTimer.stop();
+                    exTimer.stop();
+                    astTimer.stop();
+
+
+
+
+                    System.out.println("Kollision!!!");
+                    break;
+                }
+            }
+
+
 
 
 
