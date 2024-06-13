@@ -78,7 +78,7 @@ public class GameGUI {
         System.out.println(imgs.getIconWidth());
 
         // Asteroiden Anzahl
-        anzAsteroiden = 0;
+        anzAsteroiden = 1;
 
 
         // General Timer
@@ -149,7 +149,6 @@ public class GameGUI {
                     int max = gamePanel.getWidth()-width;
                     int min = 1;
                     int range = max - min + 1;
-
                     int geschAst = Math.min(6, (int) Math.ceil(anzAsteroiden / 5.0));
 
                     int delay = Math.max(1000, 2000 - (anzAsteroiden * 1000 / 30));
@@ -228,9 +227,17 @@ public class GameGUI {
         for (int i=1; i<allFigures.size(); i++){
             allFigures.get(i).move();
         }
-
-        for(int i=0; i < allBullets.size();i++){
-            allBullets.get(i).move();
+        if(allBullets.size()>0) {
+            for (int i = 0; i < allBullets.size(); i++) {
+                Bullet bullet = allBullets.get(i);
+                allBullets.get(i).move();
+                // Bullet löschen wenn es aus dem Bildschirm ist
+                if (bullet.getY() < 1) {
+                    allBullets.remove(i);
+                    gamePanel.remove(bullet);
+                    
+                }
+            }
         }
 
         // Kollision mit Asteroiden

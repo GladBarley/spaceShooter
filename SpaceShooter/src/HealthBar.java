@@ -22,22 +22,22 @@ public class HealthBar extends Figur {
         count = count +1;
         int width = healthBar.getIconWidth();
 
-        // Crop the health bar image by 10 pixels
+        // HealthBar um 27 Pixel kleiner machen
         Rectangle cropArea = new Rectangle(0, 0, (width - count*27), healthBar.getIconHeight());
         BufferedImage croppedImage = cropImage(inputImage, cropArea);
 
-        // Load the empty bar image
+        // leere Bar laden
         ImageIcon emptyBarIcon = new ImageIcon(getClass().getResource("img/UI/emptyBar.png"));
         BufferedImage emptyBarImage = convertToBufferedImage(emptyBarIcon);
 
-        // Combine the cropped health bar image with the empty bar image
+        // HealthBar mit leerer Bar combinieren
         BufferedImage combinedImage = combineImages(croppedImage, emptyBarImage);
 
-        // Convert the combined BufferedImage back to ImageIcon
+        // BufferedImage to ImageIcon
         ImageIcon completeHealthBar = new ImageIcon(combinedImage);
 
-        // Debug: Save the combined image to a file
-        saveImageToFile(combinedImage, "combinedImage.png");
+        // Debug
+        //saveImageToFile(combinedImage, "combinedImage.png");
 
         return completeHealthBar;
     }
