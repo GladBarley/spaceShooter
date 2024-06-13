@@ -3,18 +3,19 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class HealthBar extends Figur {
-    private ImageIcon healthBar;
+    private final ImageIcon healthBar;
     private int count;
 
     public HealthBar(int x, int y, JPanel panel, ImageIcon imgIcon) {
         super(x, y, panel, imgIcon, false);
         this.setIcon(imgIcon);
         this.setBounds(x, y, imgIcon.getIconWidth(), imgIcon.getIconHeight());
-        healthBar = new ImageIcon(getClass().getResource("img/UI/HealthBar.png"));
+        healthBar = new ImageIcon(Objects.requireNonNull(getClass().getResource("img/UI/HealthBar.png")));
     }
 
     public ImageIcon delHealth() {
@@ -27,19 +28,18 @@ public class HealthBar extends Figur {
         BufferedImage croppedImage = cropImage(inputImage, cropArea);
 
         // leere Bar laden
-        ImageIcon emptyBarIcon = new ImageIcon(getClass().getResource("img/UI/emptyBar.png"));
+        ImageIcon emptyBarIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("img/UI/emptyBar.png")));
         BufferedImage emptyBarImage = convertToBufferedImage(emptyBarIcon);
 
         // HealthBar mit leerer Bar combinieren
         BufferedImage combinedImage = combineImages(croppedImage, emptyBarImage);
 
         // BufferedImage to ImageIcon
-        ImageIcon completeHealthBar = new ImageIcon(combinedImage);
 
         // Debug
         //saveImageToFile(combinedImage, "combinedImage.png");
 
-        return completeHealthBar;
+        return new ImageIcon(combinedImage);
     }
 
     public static BufferedImage cropImage(BufferedImage src, Rectangle rect) {
