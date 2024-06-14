@@ -1,6 +1,7 @@
 
 
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -39,10 +40,12 @@ public class GameGUI {
     private final Timer exTimer;
     private Figur delFig;
     private int aktScore;
+    private int scale;
 
     public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
         gamePanel.setLayout(null);
+        scale = 2;
 
         exTimer = new Timer(600, new ActionListener() {
             @Override
@@ -78,7 +81,10 @@ public class GameGUI {
 
         // Healthbar
         ImageIcon healthIC = new ImageIcon(Objects.requireNonNull(getClass().getResource("img/UI/HealthBarFull.png")));
-        healthBar = new HealthBar(0,0,gamePanel,healthIC);
+        Image scaledHealth = healthIC.getImage().getScaledInstance(healthIC.getIconWidth()*scale,healthIC.getIconHeight()*scale , Image.SCALE_SMOOTH);
+        healthIC = new ImageIcon(scaledHealth);
+
+        healthBar = new HealthBar(10,0,gamePanel,healthIC,4);
         gamePanel.add(healthBar);
 
         // Mond
@@ -204,7 +210,10 @@ public class GameGUI {
                     System.out.println("Kollision!!!");
                     break;
                 }
-                healthBar.setImgIcon(healthBar.delHealth());
+                ImageIcon healthIC = healthBar.delHealth();
+                Image scaledHealth = healthIC.getImage().getScaledInstance(healthIC.getIconWidth()*scale,healthIC.getIconHeight()*scale , Image.SCALE_SMOOTH);
+                healthIC = new ImageIcon(scaledHealth);
+                healthBar.setImgIcon(healthIC);
             }
         }
 
@@ -263,7 +272,7 @@ public class GameGUI {
                     delFig = allFigures.get(e);
                     if(!allFigures.get(e).isHit()){
                         allFigures.get(e).setHit(true);
-                        if(healthBar.getCount()>=4){
+                        if(healthBar.getCount()>= healthBar.getHealth()){
                             astTimer.stop();
                             myTimer.stop();
                             bullTimer.stop();
@@ -274,7 +283,10 @@ public class GameGUI {
                             System.out.println("Kollision!!!");
                             break;
                         }
-                        healthBar.setImgIcon(healthBar.delHealth());
+                        ImageIcon healthIC = healthBar.delHealth();
+                        Image scaledHealth = healthIC.getImage().getScaledInstance(healthIC.getIconWidth()*scale,healthIC.getIconHeight()*scale , Image.SCALE_SMOOTH);
+                        healthIC = new ImageIcon(scaledHealth);
+                        healthBar.setImgIcon(healthIC);
 
 
                         exTimer.restart();

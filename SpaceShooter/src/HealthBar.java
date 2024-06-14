@@ -10,11 +10,13 @@ import javax.swing.ImageIcon;
 public class HealthBar extends Figur {
     private final ImageIcon healthBar;
     private int count;
+    private int health;
 
-    public HealthBar(int x, int y, JPanel panel, ImageIcon imgIcon) {
+    public HealthBar(int x, int y, JPanel panel, ImageIcon imgIcon, int health) {
         super(x, y, panel, imgIcon, false);
         this.setIcon(imgIcon);
         this.setBounds(x, y, imgIcon.getIconWidth(), imgIcon.getIconHeight());
+        this.health = health;
         healthBar = new ImageIcon(Objects.requireNonNull(getClass().getResource("img/UI/HealthBar.png")));
     }
 
@@ -24,7 +26,7 @@ public class HealthBar extends Figur {
         int width = healthBar.getIconWidth();
 
         // HealthBar um 27 Pixel kleiner machen
-        Rectangle cropArea = new Rectangle(0, 0, (width - count*27), healthBar.getIconHeight());
+        Rectangle cropArea = new Rectangle(0, 0, (width - (count*(width/health) - 1)), healthBar.getIconHeight());
         BufferedImage croppedImage = cropImage(inputImage, cropArea);
 
         // leere Bar laden
@@ -34,10 +36,6 @@ public class HealthBar extends Figur {
         // HealthBar mit leerer Bar combinieren
         BufferedImage combinedImage = combineImages(croppedImage, emptyBarImage);
 
-        // BufferedImage to ImageIcon
-
-        // Debug
-        //saveImageToFile(combinedImage, "combinedImage.png");
 
         return new ImageIcon(combinedImage);
     }
@@ -78,6 +76,10 @@ public class HealthBar extends Figur {
 
     public int getCount() {
         return count;
+    }
+
+    public int getHealth() {
+        return health;
     }
 }
 
