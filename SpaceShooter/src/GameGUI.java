@@ -44,6 +44,7 @@ public class GameGUI {
     private int scale;
     public int astDelay;
     private Timer astMove;
+    private Timer resetTimer;
 
     public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
@@ -232,6 +233,8 @@ public class GameGUI {
             }
         }
 
+        // Kollision Powerup
+        powerupCollision();
         // Bullets löschen
         if(!allBullets.isEmpty()) {
             for (int i = 0; i < allBullets.size(); i++) {
@@ -328,16 +331,17 @@ public class GameGUI {
 
     public void powerupCollision(){
         for(int i=0;i<allFigures.size();i++){
-            if (allFigures.get(i).collides(allFigures.get(0)) && (new Powerup().getClass() == allFigures.get(i).getClass())) {
+            if (allFigures.get(i).collides(allFigures.get(0)) && (new Freeze().getClass() == allFigures.get(i).getClass())) {
                 astMove.setDelay(20);
+                resetTimer.restart();
                 Timer resetTimer = new Timer(5000, new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         astMove.setDelay(10);
-
                     }
                 });
-                resetTimer.start();
+
+
             }
         }
     }

@@ -7,4 +7,7 @@ public class Freeze extends Powerup{
         this.setBounds(x, y, imgIcon.getIconWidth(), imgIcon.getIconHeight());
     }
 
+    public Freeze() {
+
+    }
 }

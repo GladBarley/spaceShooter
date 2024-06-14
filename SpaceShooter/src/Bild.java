@@ -7,3 +7,4 @@ public class Bild extends Figur{
         this.setBounds(x,y,imgIcon.getIconWidth(),imgIcon.getIconHeight());
     }
 }
+    
