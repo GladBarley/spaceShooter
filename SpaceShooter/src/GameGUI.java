@@ -296,23 +296,6 @@ public class GameGUI {
                         System.out.println("Kollision!!!");
                     }
 
-                    /*Timer gameOver;
-                    gameOver = new Timer(400, new ActionListener() {
-                        @Override
-                        public void actionPerformed(ActionEvent e) {
-                            if (allFigures.get(0).getImgIcon().equals(new ImageIcon("/img/transparent.png"))) {
-                                ImageIcon ic = new ImageIcon("/img/Ships/spaceship1.png");
-                                allFigures.get(0).setImgIcon(ic);
-                            } else if (allFigures.get(0).getImgIcon().equals(new ImageIcon("/img/Ships/spaceship1.png"))) {
-                                ImageIcon ic = new ImageIcon("/img/transparent.png");
-                                allFigures.get(0).setImgIcon(ic);
-                            }
-
-                        }
-                    });
-                    gameOver.setInitialDelay(200);
-                    gameOver.start();*/
-
                     break;
                 }
             }
