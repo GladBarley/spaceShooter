@@ -2,6 +2,7 @@
 
 
 import java.awt.*;
+import java.sql.Time;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -41,6 +42,8 @@ public class GameGUI {
     private Figur delFig;
     private int aktScore;
     private int scale;
+    public int astDelay;
+    private Timer astMove;
 
     public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
@@ -157,6 +160,18 @@ public class GameGUI {
         });
         astTimer.setInitialDelay(100);
         astTimer.start();
+        astDelay = 10;
+        // Asteroid move() Timer
+        Timer astMove = new Timer(astDelay, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // alle Figuren (außer Jake) bewegen
+                for (int i=1; i<allFigures.size(); i++){
+                    allFigures.get(i).move();
+                }
+            }
+        });
+        astMove.start();
 
         //Hintergrund
         ImageIcon backgroundimg = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Space_Background/Space.png")));
@@ -217,10 +232,7 @@ public class GameGUI {
             }
         }
 
-        // alle Figuren (außer Jake) bewegen
-        for (int i=1; i<allFigures.size(); i++){
-            allFigures.get(i).move();
-        }
+        // Bullets löschen
         if(!allBullets.isEmpty()) {
             for (int i = 0; i < allBullets.size(); i++) {
                 Bullet bullet = allBullets.get(i);
@@ -309,6 +321,29 @@ public class GameGUI {
         gamePanel.repaint();
     }
 
+    public void setAstDelay(int astDelay) {
+        this.astDelay = astDelay;
+        astMove.setDelay(astDelay);
+    }
+
+    public void powerupCollision(){
+        for(int i=0;i<allFigures.size();i++){
+            if (allFigures.get(i).collides(allFigures.get(0)) && (new Powerup().getClass() == allFigures.get(i).getClass())) {
+                astMove.setDelay(20);
+                Timer resetTimer = new Timer(5000, new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        astMove.setDelay(10);
+
+                    }
+                });
+                resetTimer.start();
+            }
+        }
+    }
+
+
+
     public static void main(String[] args) {
         JFrame frame = new JFrame("Der wilde Space Shooter");
         frame.setContentPane(new GameGUI().mainPanel);
@@ -341,4 +376,5 @@ public class GameGUI {
         });
         frame.setVisible(true);
     }
+
 }
