@@ -28,6 +28,10 @@ public abstract class Figur extends JLabel {
 
     }
 
+    public Figur() {
+
+    }
+
     public void move() { }
     public void move(boolean left, boolean right, boolean up, boolean down) { }
 

@@ -29,6 +29,7 @@ public class GameGUI {
     private final HealthBar healthBar;
 
     ArrayList<Figur> allFigures = new ArrayList<>();
+    ArrayList<Helper> allHelper = new ArrayList<>();
     ArrayList<Bullet> allBullets = new ArrayList<>();
 
 
@@ -41,6 +42,7 @@ public class GameGUI {
     private Figur delFig;
     private int aktScore;
     private int scale;
+    private int anzHelper;
 
     public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
@@ -65,6 +67,31 @@ public class GameGUI {
         gamePanel.add(spaceship);
         System.out.println(imgs.getIconHeight());
         System.out.println(imgs.getIconWidth());
+
+        //Helfer laden
+        anzHelper = 2;
+        for (int i = 0; i < anzHelper - 1; i++){
+            switch(allHelper.size()){
+                case 0:
+                    System.out.println(1);
+                    Helper helper1 = new Helper(spaceship.getX() - 50 - spaceship.getWidth()/2,300,gamePanel,imgs,2);
+                    gamePanel.add(helper1);
+                    allHelper.add(helper1);
+                case 1:
+                    System.out.println(2);
+                    Helper helper2 = new Helper(spaceship.getX() + 50 + spaceship.getWidth(),300,gamePanel,imgs,2);
+                    gamePanel.add(helper2);
+                    allHelper.add(helper2);
+                case 2:
+                    Helper helper3 = new Helper(allHelper.get(0).getX() - 50 - spaceship.getWidth()/2,300,gamePanel,imgs,2);
+                    gamePanel.add(helper3);
+                    allHelper.add(helper3);
+                case 3:
+                    Helper helper4 = new Helper(allHelper.get(1).getX() + 50 + spaceship.getWidth()/2,300,gamePanel,imgs,2);
+                    gamePanel.add(helper4);
+                    allHelper.add(helper4);
+            }
+        }
 
         // Asteroiden Anzahl
         anzAsteroiden = 1;
@@ -193,6 +220,29 @@ public class GameGUI {
     public void myTimer_ActionPerformed() {
         // Bewegen von Raumschiff
         allFigures.get(0).move(keyLeft,keyRight,keyUp,keyDown);
+
+        //Bewegen von  Helper
+        for (int i = 0; i < allHelper.size(); i++){
+            allHelper.get(i).move(keyLeft,keyRight,keyUp,keyDown);
+            allHelper.get(i).setY(allFigures.get(0).getY());
+            switch(i){
+                case 0:
+                    allHelper.get(i).setX(allFigures.get(0).getX() - 50 - allFigures.get(0).getWidth()/2);
+                case 1:
+                    allHelper.get(i).setX(allFigures.get(0).getX() - 50 + allFigures.get(0).getWidth());
+                case 2:
+            }
+
+
+            case 2:
+                Helper helper3 = new Helper(allHelper.get(0).getX() - 50 - spaceship.getWidth()/2,300,gamePanel,imgs,2);
+                gamePanel.add(helper3);
+                allHelper.add(helper3);
+            case 3:
+                Helper helper4 = new Helper(allHelper.get(1).getX() + 50 + spaceship.getWidth()/2,300,gamePanel,imgs,2);
+                gamePanel.add(helper4);
+                allHelper.add(helper4);
+        }
 
         ImageIcon ic = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/explosion.gif")));
         // Kollision Boden

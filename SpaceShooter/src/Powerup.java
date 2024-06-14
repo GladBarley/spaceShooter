@@ -11,9 +11,6 @@ public class Powerup extends Figur {
         this.setBounds(x, y, imgIcon.getIconWidth(), imgIcon.getIconHeight());
     }
 
-    public void triggerPowerup(){
-        if(type==1)
-    }
 
 
 }
