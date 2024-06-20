@@ -14,6 +14,10 @@ public class Player extends Figur{
 
     }
 
+    public Player() {
+        super();
+    }
+
     public void move(boolean left,boolean right,boolean up,boolean down){
         // Reaktion auf Tastatureingaben; Verzögerung bei Richtungsänderung
 
@@ -47,4 +51,6 @@ public class Player extends Figur{
 
 
     }
+
+
 }
