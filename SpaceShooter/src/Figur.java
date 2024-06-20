@@ -28,6 +28,10 @@ public abstract class Figur extends JLabel {
 
     }
 
+    public Figur() {
+
+    }
+
     public void move() { }
     public void move(boolean left, boolean right, boolean up, boolean down) { }
 
@@ -142,6 +146,8 @@ public abstract class Figur extends JLabel {
     public ImageIcon getImgIcon(){
         return this.imgIcon;
     }
+
+    public void setSpeed(int speed){}
 
     //public int getWidth(){return imgIcon.getIconWidth();}
     //public int getHeight(){return imgIcon.getIconHeight();}
