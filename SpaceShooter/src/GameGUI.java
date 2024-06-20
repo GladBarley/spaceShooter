@@ -43,8 +43,9 @@ public class GameGUI {
     private int aktScore;
     private int scale;
     public int astDelay;
-    private Timer astMove;
+    public Timer astMove;
     private Timer resetTimer;
+    private Timer powerUpSpawn;
 
     public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
@@ -105,6 +106,31 @@ public class GameGUI {
         });
         bullTimer.setInitialDelay(200);
         bullTimer.start();
+
+        //Powerup Timer
+        powerUpSpawn = new Timer(6000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int randInt = (int)(Math.random()*10);
+
+                randInt = 1;
+
+                if(randInt == 1){
+                    ImageIcon powerIc = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/freeze.png")));
+                    int width = powerIc.getIconWidth();
+                    int max = gamePanel.getWidth()-width;
+                    int min = 1;
+                    int range = max - min + 1;
+                    int rx = (int) (Math.random() * range) + min;
+                    Freeze freeze = new Freeze(rx,0,gamePanel,powerIc,false);
+                    gamePanel.add(freeze);
+                    allFigures.add(freeze);
+
+                }
+            }
+        });
+        powerUpSpawn.setInitialDelay(6000);
+        powerUpSpawn.start();
 
         // Hintergrund Timer
         //Hintergrund
@@ -332,16 +358,24 @@ public class GameGUI {
     public void powerupCollision(){
         for(int i=0;i<allFigures.size();i++){
             if (allFigures.get(i).collides(allFigures.get(0)) && (new Freeze().getClass() == allFigures.get(i).getClass())) {
-                astMove.setDelay(20);
+                for (int e = 0; e<allFigures.size();e++){
+                    int geschAst = (int)((Math.min(6, (int) Math.ceil(anzAsteroiden / 5.0)))/4);
+                    allFigures.get(i).setSpeed(geschAst);
+
+                }
+                if(resetTimer == null) {
+                    resetTimer = new Timer(5000, new ActionListener() {
+                        @Override
+                        public void actionPerformed(ActionEvent e) {
+                            for (int f = 0; f<allFigures.size();f++){
+                                int geschAst = (Math.min(6, (int) Math.ceil(anzAsteroiden / 5.0)));
+                                allFigures.get(f).setSpeed(geschAst);
+
+                            }
+                        }
+                    });
+                }
                 resetTimer.restart();
-                Timer resetTimer = new Timer(5000, new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        astMove.setDelay(10);
-                    }
-                });
-
-
             }
         }
     }

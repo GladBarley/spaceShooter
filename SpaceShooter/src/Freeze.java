@@ -10,4 +10,5 @@ public class Freeze extends Powerup{
     public Freeze() {
 
     }
+
 }

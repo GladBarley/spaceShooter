@@ -14,4 +14,8 @@ public class Powerup extends Figur {
     public Powerup() {
         super();
     }
+
+    public void move(){
+        y = y + 3;
+    }
 }
