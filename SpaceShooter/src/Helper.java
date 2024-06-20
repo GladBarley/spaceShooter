@@ -16,4 +16,39 @@ public class Helper extends Player{
         this.xr = 0;
         this.yr = 0;
     }
+
+    public void move(boolean left,boolean right,boolean up,boolean down, Figur p){
+        // Reaktion auf Tastatureingaben; Verzögerung bei Richtungsänderung, Ignorierung der Ränder
+
+        int fw = panel.getWidth();
+        int fh = panel.getHeight();
+        int h = imgIcon.getIconHeight();
+        int w = imgIcon.getIconWidth();
+
+        if(p.getX() == 0){
+            left = false; xr = 0;
+        }
+        if(p.getX() == fw - p.getWidth()){
+            right = false; xr = 0;
+        }
+
+        if (left) xr--;
+        if (right) xr++;
+        if (!left && !right && xr!=0)
+            xr = (int) Math.signum(xr)*(Math.abs(xr)-1);
+        if (xr < -10) xr = -10;
+        if (xr > 10) xr = 10;
+        x = x + xr;
+
+
+        if (up) yr--;
+        if (down) yr++;
+        if (!up && !down && yr!=0)
+            yr = (int) Math.signum(yr)*(Math.abs(yr)-1);
+        if (yr < -10) yr = -10;
+        if (yr > 10) yr = 10;
+        y = y + yr;
+
+
+    }
 }

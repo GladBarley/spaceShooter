@@ -39,6 +39,7 @@ public class GameGUI {
     private final Timer astTimer;
     private final Timer bullTimer;
     private final Timer exTimer;
+    private final Timer helperTimer;
     private Figur delFig;
     private int aktScore;
     private int scale;
@@ -69,7 +70,7 @@ public class GameGUI {
         System.out.println(imgs.getIconWidth());
 
         //Helfer laden
-        anzHelper = 2;
+        anzHelper = 4;
         for (int i = 0; i < anzHelper - 1; i++){
             switch(allHelper.size()){
                 case 0:
@@ -129,6 +130,21 @@ public class GameGUI {
         bullTimer.setInitialDelay(200);
         bullTimer.start();
 
+        //Timer für Helper
+        helperTimer = new Timer(2000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                for(int i = 0; i < allHelper.size(); i++){
+                    Figur spaceship = allHelper.get(i);
+                    ImageIcon bullImg = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Ships/Missile1.png")));
+                    Bullet bull1 = new Bullet(spaceship.getX()+(spaceship.getImgIcon().getIconWidth()/2), spaceship.getY(),bullImg,gamePanel,4);
+                    allBullets.add(bull1);
+                    gamePanel.add(bull1);
+                }
+            }
+        });
+        helperTimer.setInitialDelay(2000);
+        helperTimer.start();
         // Hintergrund Timer
         //Hintergrund
         Timer backgroundTimer = new Timer(100, new ActionListener() {
@@ -223,25 +239,8 @@ public class GameGUI {
 
         //Bewegen von  Helper
         for (int i = 0; i < allHelper.size(); i++){
-            allHelper.get(i).move(keyLeft,keyRight,keyUp,keyDown);
+            allHelper.get(i).move(keyLeft,keyRight,keyUp,keyDown, allFigures.get(0));
             allHelper.get(i).setY(allFigures.get(0).getY());
-            switch(i){
-                case 0:
-                    allHelper.get(i).setX(allFigures.get(0).getX() - 50 - allFigures.get(0).getWidth()/2);
-                case 1:
-                    allHelper.get(i).setX(allFigures.get(0).getX() - 50 + allFigures.get(0).getWidth());
-                case 2:
-            }
-
-
-            case 2:
-                Helper helper3 = new Helper(allHelper.get(0).getX() - 50 - spaceship.getWidth()/2,300,gamePanel,imgs,2);
-                gamePanel.add(helper3);
-                allHelper.add(helper3);
-            case 3:
-                Helper helper4 = new Helper(allHelper.get(1).getX() + 50 + spaceship.getWidth()/2,300,gamePanel,imgs,2);
-                gamePanel.add(helper4);
-                allHelper.add(helper4);
         }
 
         ImageIcon ic = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/explosion.gif")));
