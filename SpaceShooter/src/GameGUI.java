@@ -45,8 +45,6 @@ public class GameGUI {
     private int aktScore;
     private int scale;
 
-    private int anzHelper;
-
     public int astDelay;
     public Timer astMove;
     private Timer resetTimer;
@@ -76,31 +74,6 @@ public class GameGUI {
         gamePanel.add(spaceship);
         System.out.println(imgs.getIconHeight());
         System.out.println(imgs.getIconWidth());
-
-        //Helfer laden
-        anzHelper = 4;
-        for (int i = 0; i < anzHelper - 1; i++){
-            switch(allHelper.size()){
-                case 0:
-                    System.out.println(1);
-                    Helper helper1 = new Helper(spaceship.getX() - 50 - spaceship.getWidth()/2,300,gamePanel,imgs,2);
-                    gamePanel.add(helper1);
-                    allHelper.add(helper1);
-                case 1:
-                    System.out.println(2);
-                    Helper helper2 = new Helper(spaceship.getX() + 50 + spaceship.getWidth(),300,gamePanel,imgs,2);
-                    gamePanel.add(helper2);
-                    allHelper.add(helper2);
-                case 2:
-                    Helper helper3 = new Helper(allHelper.get(0).getX() - 50 - spaceship.getWidth()/2,300,gamePanel,imgs,2);
-                    gamePanel.add(helper3);
-                    allHelper.add(helper3);
-                case 3:
-                    Helper helper4 = new Helper(allHelper.get(1).getX() + 50 + spaceship.getWidth()/2,300,gamePanel,imgs,2);
-                    gamePanel.add(helper4);
-                    allHelper.add(helper4);
-            }
-        }
 
         // Asteroiden Anzahl
         anzAsteroiden = 1;
@@ -161,19 +134,35 @@ public class GameGUI {
             public void actionPerformed(ActionEvent e) {
                 int randInt = (int)(Math.random()*10);
 
-                randInt = 1;
+                randInt = 2;
 
-                if(randInt == 1){
-                    ImageIcon powerIc = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/freeze.png")));
-                    int width = powerIc.getIconWidth();
-                    int max = gamePanel.getWidth()-width;
-                    int min = 1;
-                    int range = max - min + 1;
-                    int rx = (int) (Math.random() * range) + min;
-                    Freeze freeze = new Freeze(rx,0,gamePanel,powerIc,false);
-                    gamePanel.add(freeze);
-                    allFigures.add(freeze);
-
+                //Variablen für Powerups
+                ImageIcon powerIc;
+                int width, max, min, range, rx;
+                switch(randInt){
+                    //Freeze Powerup
+                    case 1:
+                        powerIc = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/freeze.png")));
+                        width = powerIc.getIconWidth();
+                        max = gamePanel.getWidth()-width;
+                        min = 1;
+                        range = max - min + 1;
+                        rx = (int) (Math.random() * range) + min;
+                        Freeze freeze = new Freeze(rx,0,gamePanel,powerIc,false);
+                        gamePanel.add(freeze);
+                        allFigures.add(freeze);
+                    //Helper Powerup
+                    case 2:
+                        System.out.println("Helper Powerup gespawnt");
+                        powerIc = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/helperPowerup.png")));
+                        width = powerIc.getIconWidth();
+                        max = gamePanel.getWidth()-width;
+                        min = 1;
+                        range = max - min + 1;
+                        rx = (int) (Math.random() * range) + min;
+                        HelperPowerup helperPowerup = new HelperPowerup(rx,0,gamePanel,powerIc,false);
+                        gamePanel.add(helperPowerup);
+                        allFigures.add(helperPowerup);
                 }
             }
         });
@@ -439,6 +428,50 @@ public class GameGUI {
                     });
                 }
                 resetTimer.restart();
+            } else if (allFigures.get(i).collides(allFigures.get(0)) && (HelperPowerup.class == allFigures.get(i).getClass()) && (!allFigures.get(i).isHit())) {
+                //Powerup sperren:
+                allFigures.get(i).setHit(true);
+                //Helfer laden
+                ImageIcon imgs = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Ships/spaceship1.png")));
+                int anzHelper = allHelper.size();
+                if (anzHelper == 0){
+                    Helper helper1 = new Helper(allFigures.get(0).getX() - 50 - allFigures.get(0).getWidth()/2, allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
+                    gamePanel.add(helper1);
+                    allHelper.add(helper1);
+                }else if(anzHelper == 1){
+                    Helper helper2 = new Helper(allFigures.get(0).getX() + 50 + allFigures.get(0).getWidth(), allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
+                    gamePanel.add(helper2);
+                    allHelper.add(helper2);
+                } else if (anzHelper == 2) {
+                    Helper helper3 = new Helper(allHelper.get(0).getX() - 50 - allFigures.get(0).getWidth()/2, allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
+                    gamePanel.add(helper3);
+                    allHelper.add(helper3);
+                } else if (anzHelper == 3) {
+                    Helper helper4 = new Helper(allHelper.get(1).getX() + 50 + allFigures.get(0).getWidth()/2, allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
+                    gamePanel.add(helper4);
+                    allHelper.add(helper4);
+                }
+                /*
+                switch(anzHelper){
+                    case 0:
+                        System.out.println("Helper 1");
+                        Helper helper1 = new Helper(allFigures.get(0).getX() - 50 - allFigures.get(0).getWidth()/2, allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
+                        gamePanel.add(helper1);
+                        allHelper.add(helper1);
+                    case 1:
+                        System.out.println("Helper 2");
+                        Helper helper2 = new Helper(allFigures.get(0).getX() + 50 + allFigures.get(0).getWidth(), allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
+                        gamePanel.add(helper2);
+                        allHelper.add(helper2);
+                    case 2:
+                        Helper helper3 = new Helper(allHelper.get(0).getX() - 50 - allFigures.get(0).getWidth()/2, allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
+                        gamePanel.add(helper3);
+                        allHelper.add(helper3);
+                    case 3:
+                        Helper helper4 = new Helper(allHelper.get(1).getX() + 50 + allFigures.get(0).getWidth()/2, allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
+                        gamePanel.add(helper4);
+                        allHelper.add(helper4);
+                }*/
             }
         }
     }

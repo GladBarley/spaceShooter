@@ -3,7 +3,7 @@ import java.awt.*;
 
 public class Helper extends Player{
 
-    public Helper(int x, int y, JPanel panel, ImageIcon imgIcon, int bs) {
+    public Helper(int x, int y, JPanel panel, ImageIcon imgIcon, int bs, int xr, int yr) {
         super();
         this.x = x;
         this.y = y;
@@ -13,8 +13,8 @@ public class Helper extends Player{
         this.imgIcon = new ImageIcon(scaledRocket);
         this.setIcon(this.imgIcon);
         this.setBounds(x,y,this.imgIcon.getIconWidth(),this.imgIcon.getIconHeight());
-        this.xr = 0;
-        this.yr = 0;
+        this.xr = xr;
+        this.yr = yr;
     }
 
     public void move(boolean left,boolean right,boolean up,boolean down, Figur p){
