@@ -186,6 +186,14 @@ public class GameGUI {
         Timer backgroundTimer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //Hintergrund
+                gamePanel.remove(background1);
+                background1 = new Background(background1.getX(), background1.getY(), gamePanel, new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Space_Background/Space.png"))));
+                gamePanel.add(background1);
+                gamePanel.remove(background2);
+                background2 = new Background(background2.getX(), background2.getY(), gamePanel, new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Space_Background/Space.png"))));
+                gamePanel.add(background2);
+
                 if (background1.getY() + 2 == -1 || background1.getY() + 2 == 0) {
                     background2.move(background1.getHeight() * -2 + 2);
                 } else {
