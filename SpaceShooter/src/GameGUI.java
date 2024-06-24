@@ -49,6 +49,7 @@ public class GameGUI {
     public Timer astMove;
     private Timer resetTimer;
     private Timer powerUpSpawn;
+    private boolean debugimmortality = false;
 
 
     public GameGUI() {
@@ -257,7 +258,7 @@ public class GameGUI {
 
     public boolean checkMoonCollision(ArrayList<Figur> allFigures){
         for(int i=1;i<allFigures.size();i++){
-            if(allFigures.get(i).getY()>550&& !allFigures.get(i).isHit()){
+            if(allFigures.get(i).getY()>550 && !allFigures.get(i).isHit()){
                 ImageIcon ic = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/explosion.gif")));
                 allFigures.get(i).setImgIcon(ic);
                 return true;
@@ -291,7 +292,7 @@ public class GameGUI {
         ImageIcon ic = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/explosion.gif")));
         // Kollision Boden
         for(int e=1; e<allFigures.size();e++){
-            if(checkMoonCollision(allFigures)){
+            if(checkMoonCollision(allFigures) && !debugimmortality){
                 allFigures.get(e).setHit(true);
                 if(healthBar.getCount()>=4){
                     astTimer.stop();
@@ -360,7 +361,7 @@ public class GameGUI {
 
         int i = 0;
         for(int e=1;e<allFigures.size();e++){
-                if(allFigures.get(e).collides(allFigures.get(i))){
+                if(allFigures.get(e).collides(allFigures.get(i)) && !debugimmortality){
 
                     delFig = allFigures.get(e);
                     if(!allFigures.get(e).isHit()){
