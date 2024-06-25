@@ -257,7 +257,7 @@ public class GameGUI {
 
     public boolean checkMoonCollision(ArrayList<Figur> allFigures){
         for(int i=1;i<allFigures.size();i++){
-            if(allFigures.get(i).getY()>550 && !allFigures.get(i).isHit()){
+            if(allFigures.get(i).getY()>550 && !allFigures.get(i).isHit() && allFigures.get(i).getClass() == Asteroid.class){
                 ImageIcon ic = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/explosion.gif")));
                 allFigures.get(i).setImgIcon(ic);
                 return true;
@@ -289,6 +289,8 @@ public class GameGUI {
         }
 
         ImageIcon ic = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/explosion.gif")));
+
+
         // Kollision Boden
         for(int e=1; e<allFigures.size();e++){
             if(checkMoonCollision(allFigures) && !debugimmortality){
@@ -366,7 +368,7 @@ public class GameGUI {
 
         }
 
-
+        // Kollision mit Raumschiff
         int i = 0;
         for(int e=1;e<allFigures.size();e++){
                 if(allFigures.get(e).collides(allFigures.get(i)) && !debugimmortality){
