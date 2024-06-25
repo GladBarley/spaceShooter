@@ -293,6 +293,7 @@ public class GameGUI {
             if(checkMoonCollision(allFigures) && !debugimmortality){
                 allFigures.get(e).setHit(true);
                 if(healthBar.getCount()>=4){
+                    gameOver();
                     astTimer.stop();
                     myTimer.stop();
                     bullTimer.stop();
@@ -300,12 +301,7 @@ public class GameGUI {
                     helperTimer.stop();
                     astTimer.stop();
                     powerUpSpawn.stop();
-                    backgroundTimer.stop();
                     exTimer.restart();
-                    gamePanel.remove(allFigures.get(e));
-                    allFigures.get(e).setImgIcon(ic);
-                    gamePanel.add(allFigures.get(e));
-                    System.out.println("Kollision!!!");
                     break;
                 }
                 ImageIcon healthIC = healthBar.delHealth();
@@ -374,6 +370,7 @@ public class GameGUI {
                     if(!allFigures.get(e).isHit()){
                         allFigures.get(e).setHit(true);
                         if(healthBar.getCount()>= healthBar.getHealth()){
+                            gameOver();
                             astTimer.stop();
                             myTimer.stop();
                             bullTimer.stop();
@@ -381,10 +378,6 @@ public class GameGUI {
                             exTimer.restart();
                             helperTimer.stop();
                             powerUpSpawn.stop();
-                            backgroundTimer.stop();
-                            gamePanel.remove(allFigures.get(e));
-                            allFigures.get(e).setImgIcon(ic);
-                            gamePanel.add(allFigures.get(e));
                             break;
                         }
                         ImageIcon healthIC = healthBar.delHealth();
@@ -404,13 +397,29 @@ public class GameGUI {
                 }
             }
 
-
-
-
-
-
-
         gamePanel.repaint();
+    }
+
+    public void gameOver(){
+        allFigures.clear();
+        allHelper.clear();
+        allBullets.clear();
+        //gamePanel.removeAll();
+        Component[] components = gamePanel.getComponents();
+
+        for (Component component : components) {
+            if(component.getClass() != Background.class)
+                gamePanel.remove(component);
+        }
+        ImageIcon overIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Game_Over.png")));
+        JLabel overLabel = new JLabel(overIcon);
+        overLabel.setBounds(50,50, overIcon.getIconWidth(), overIcon.getIconHeight());
+        gamePanel.add(overLabel);
+
+        ImageIcon againIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Play_Again.png")));
+        JButton againButton = new JButton(againIcon);
+        againButton.setBounds(250,350, againIcon.getIconWidth(), againIcon.getIconHeight());
+        gamePanel.add(againButton);
     }
 
     public void setAstDelay(int astDelay) {
