@@ -13,7 +13,10 @@ public class Asteroid extends Figur{
 
     }
 
-    public Asteroid(){}
+
+    public Asteroid(){
+        super();
+    }
 
     public void move(){
         y = y + speed;

@@ -49,7 +49,7 @@ public class GameGUI {
     public Timer astMove;
     private Timer resetTimer;
     private Timer powerUpSpawn;
-    private boolean debugimmortality = false;
+    private boolean debugimmortality = true;
 
 
     public GameGUI() {
@@ -309,6 +309,10 @@ public class GameGUI {
                 Image scaledHealth = healthIC.getImage().getScaledInstance(healthIC.getIconWidth()*scale,healthIC.getIconHeight()*scale , Image.SCALE_SMOOTH);
                 healthIC = new ImageIcon(scaledHealth);
                 healthBar.setImgIcon(healthIC);
+            }
+            if(allFigures.get(e).getY()>600 && allFigures.get(e).getClass() == new Asteroid().getClass()){
+                allFigures.remove(e);
+                gamePanel.remove(e);
             }
         }
 
