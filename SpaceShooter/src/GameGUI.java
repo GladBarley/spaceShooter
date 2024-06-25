@@ -299,6 +299,11 @@ public class GameGUI {
                     myTimer.stop();
                     bullTimer.stop();
                     exTimer.restart();
+                    helperTimer.stop();
+                    astMove.stop();
+                    resetTimer.stop();
+                    powerUpSpawn.stop();
+                    exTimer.restart();
                     gamePanel.remove(allFigures.get(e));
                     allFigures.get(e).setImgIcon(ic);
                     gamePanel.add(allFigures.get(e));
@@ -375,6 +380,10 @@ public class GameGUI {
                             myTimer.stop();
                             bullTimer.stop();
                             exTimer.restart();
+                            helperTimer.stop();
+                            astMove.stop();
+                            resetTimer.stop();
+                            powerUpSpawn.stop();
                             gamePanel.remove(allFigures.get(e));
                             allFigures.get(e).setImgIcon(ic);
                             gamePanel.add(allFigures.get(e));
