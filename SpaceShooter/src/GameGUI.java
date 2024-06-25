@@ -46,10 +46,11 @@ public class GameGUI {
     private int scale;
 
     public int astDelay;
-    public Timer astMove;
+    private Timer astMove;
     private Timer resetTimer;
     private Timer powerUpSpawn;
-    private boolean debugimmortality = true;
+    private Timer backgroundTimer;
+    private boolean debugimmortality = false;
 
 
     public GameGUI() {
@@ -73,8 +74,6 @@ public class GameGUI {
         Player spaceship = new Player(400,300,gamePanel,imgs,2);
         allFigures.add(spaceship);
         gamePanel.add(spaceship);
-        System.out.println(imgs.getIconHeight());
-        System.out.println(imgs.getIconWidth());
 
         // Asteroiden Anzahl
         anzAsteroiden = 1;
@@ -173,7 +172,7 @@ public class GameGUI {
 
         // Hintergrund Timer
         //Hintergrund
-        Timer backgroundTimer = new Timer(100, new ActionListener() {
+        backgroundTimer = new Timer(100, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //Hintergrund
@@ -300,9 +299,9 @@ public class GameGUI {
                     bullTimer.stop();
                     exTimer.restart();
                     helperTimer.stop();
-                    astMove.stop();
-                    resetTimer.stop();
+                    astTimer.stop();
                     powerUpSpawn.stop();
+                    backgroundTimer.stop();
                     exTimer.restart();
                     gamePanel.remove(allFigures.get(e));
                     allFigures.get(e).setImgIcon(ic);
@@ -315,7 +314,7 @@ public class GameGUI {
                 healthIC = new ImageIcon(scaledHealth);
                 healthBar.setImgIcon(healthIC);
             }
-            if(allFigures.get(e).getY()>600 && allFigures.get(e).getClass() == new Asteroid().getClass()){
+            if(allFigures.get(e).getY()>600 && allFigures.get(e).getClass() == Asteroid.class){
                 allFigures.remove(e);
                 gamePanel.remove(e);
             }
@@ -379,15 +378,14 @@ public class GameGUI {
                             astTimer.stop();
                             myTimer.stop();
                             bullTimer.stop();
+                            astTimer.stop();
                             exTimer.restart();
                             helperTimer.stop();
-                            astMove.stop();
-                            resetTimer.stop();
                             powerUpSpawn.stop();
+                            backgroundTimer.stop();
                             gamePanel.remove(allFigures.get(e));
                             allFigures.get(e).setImgIcon(ic);
                             gamePanel.add(allFigures.get(e));
-                            System.out.println("Kollision!!!");
                             break;
                         }
                         ImageIcon healthIC = healthBar.delHealth();
@@ -465,27 +463,7 @@ public class GameGUI {
                     gamePanel.add(helper4);
                     allHelper.add(helper4);
                 }
-                /*
-                switch(anzHelper){
-                    case 0:
-                        System.out.println("Helper 1");
-                        Helper helper1 = new Helper(allFigures.get(0).getX() - 50 - allFigures.get(0).getWidth()/2, allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
-                        gamePanel.add(helper1);
-                        allHelper.add(helper1);
-                    case 1:
-                        System.out.println("Helper 2");
-                        Helper helper2 = new Helper(allFigures.get(0).getX() + 50 + allFigures.get(0).getWidth(), allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
-                        gamePanel.add(helper2);
-                        allHelper.add(helper2);
-                    case 2:
-                        Helper helper3 = new Helper(allHelper.get(0).getX() - 50 - allFigures.get(0).getWidth()/2, allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
-                        gamePanel.add(helper3);
-                        allHelper.add(helper3);
-                    case 3:
-                        Helper helper4 = new Helper(allHelper.get(1).getX() + 50 + allFigures.get(0).getWidth()/2, allFigures.get(0).getY(),gamePanel,imgs,2, allFigures.get(0).getXr(), allFigures.get(0).getYr());
-                        gamePanel.add(helper4);
-                        allHelper.add(helper4);
-                }*/
+
             }
         }
     }
