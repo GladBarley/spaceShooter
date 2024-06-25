@@ -49,7 +49,7 @@ public class GameGUI {
     public Timer astMove;
     private Timer resetTimer;
     private Timer powerUpSpawn;
-    private boolean debugimmortality = true;
+    private boolean debugimmortality = false;
 
 
     public GameGUI() {
@@ -255,10 +255,9 @@ public class GameGUI {
         gamePanel.add(background2);
     }
 
-
     public boolean checkMoonCollision(ArrayList<Figur> allFigures){
         for(int i=1;i<allFigures.size();i++){
-            if(allFigures.get(i).getY()>550 && !allFigures.get(i).isHit()){
+            if(allFigures.get(i).getY()>550 && !allFigures.get(i).isHit() && allFigures.get(i).getClass() == Asteroid.class){
                 ImageIcon ic = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/explosion.gif")));
                 allFigures.get(i).setImgIcon(ic);
                 return true;
@@ -300,7 +299,6 @@ public class GameGUI {
                     bullTimer.stop();
                     exTimer.restart();
                     helperTimer.stop();
-                    astMove.stop();
                     resetTimer.stop();
                     powerUpSpawn.stop();
                     exTimer.restart();
@@ -381,7 +379,6 @@ public class GameGUI {
                             bullTimer.stop();
                             exTimer.restart();
                             helperTimer.stop();
-                            astMove.stop();
                             resetTimer.stop();
                             powerUpSpawn.stop();
                             gamePanel.remove(allFigures.get(e));
@@ -424,6 +421,12 @@ public class GameGUI {
     public void powerupCollision(){
         for(int i=0;i<allFigures.size();i++){
             if (allFigures.get(i).collides(allFigures.get(0)) && (new Freeze().getClass() == allFigures.get(i).getClass())) {
+
+                // PowerUp löschen
+                gamePanel.remove(allFigures.get(i));
+                allFigures.remove(i);
+
+
                 for (int e = 0; e<allFigures.size();e++){
                     int geschAst = (int)((Math.min(6, (int) Math.ceil(anzAsteroiden / 5.0)))/4);
                     allFigures.get(i).setSpeed(geschAst);
@@ -443,8 +446,11 @@ public class GameGUI {
                 }
                 resetTimer.restart();
             } else if (allFigures.get(i).collides(allFigures.get(0)) && (HelperPowerup.class == allFigures.get(i).getClass()) && (!allFigures.get(i).isHit())) {
-                //Powerup sperren:
-                allFigures.get(i).setHit(true);
+
+                // PowerUp löschen
+                gamePanel.remove(allFigures.get(i));
+                allFigures.remove(i);
+
                 //Helfer laden
                 ImageIcon imgs = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Ships/spaceship1.png")));
                 int anzHelper = allHelper.size();
@@ -489,8 +495,6 @@ public class GameGUI {
             }
         }
     }
-
-
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("Der wilde Space Shooter");
