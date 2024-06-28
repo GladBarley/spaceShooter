@@ -14,11 +14,11 @@ import javax.swing.JLabel;
 
 
 public class GameGUI {
-    public static JFrame frame;
+    public JFrame frame;
     private JPanel mainPanel;
     private JPanel gamePanel;
     private JLabel score;
-
+    public static KeyListener keyListener;
 
 
     Background background1;
@@ -34,8 +34,7 @@ public class GameGUI {
     ArrayList<Bullet> allBullets = new ArrayList<>();
 
 
-    private static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
-
+    public static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
     private final Timer myTimer;
     private final Timer astTimer;
     private final Timer bullTimer;
@@ -52,11 +51,14 @@ public class GameGUI {
     private Timer backgroundTimer;
     private boolean debugimmortality = false;
 
+    Main main;
+    public GameGUI(Main main) {
+        this.main = main;
 
-    public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
         gamePanel.setLayout(null);
         scale = 2;
+        gamePanel.requestFocusInWindow();
 
         exTimer = new Timer(600, new ActionListener() {
             @Override
@@ -401,12 +403,13 @@ public class GameGUI {
     }
 
     public void gameOver(){
-        //gamePanel.removeAll();
         Component[] components = gamePanel.getComponents();
 
         for (Component component : components) {
-            if(component.getClass() != Background.class)
+            if(component.getClass() != Background.class) {
+                System.out.println(component.toString());
                 gamePanel.remove(component);
+            }
         }
         ImageIcon overIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Game_Over.png")));
         JLabel overLabel = new JLabel(overIcon);
@@ -417,12 +420,12 @@ public class GameGUI {
         JButton againButton = new JButton(againIcon);
         againButton.setOpaque(false);
         againButton.setContentAreaFilled(false);
-        againButton.setBorderPainted(false);
+        //againButton.setBorderPainted(false);
         againButton.setBounds(250,350, againIcon.getIconWidth(), againIcon.getIconHeight());
         againButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                resetGame();
+                main.resetGame();
             }
         });
         gamePanel.add(againButton);
@@ -491,94 +494,16 @@ public class GameGUI {
         }
     }
 
-    public static void main(String[] args) {
-        frame = new JFrame("Der wilde Space Shooter");
-        frame.setContentPane(new GameGUI().mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setResizable(false);
-        //frame.setSize(800, 600);
-        frame.addKeyListener(new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_LEFT || event.getKeyCode() == KeyEvent.VK_A) keyLeft = true;
-                if (event.getKeyCode() == KeyEvent.VK_RIGHT || event.getKeyCode() == KeyEvent.VK_D) keyRight = true;
-                if (event.getKeyCode() == KeyEvent.VK_UP || event.getKeyCode() == KeyEvent.VK_W) keyUp = true;
-                if (event.getKeyCode() == KeyEvent.VK_DOWN || event.getKeyCode() == KeyEvent.VK_S) keyDown = true;
-                if (event.getKeyCode() == KeyEvent.VK_SPACE) Spacebar = true;
-            }
-            @Override
-            public void keyReleased(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_LEFT || event.getKeyCode() == KeyEvent.VK_A) keyLeft = false;
-                if (event.getKeyCode() == KeyEvent.VK_RIGHT || event.getKeyCode() == KeyEvent.VK_D) keyRight = false;
-                if (event.getKeyCode() == KeyEvent.VK_UP || event.getKeyCode() == KeyEvent.VK_W) keyUp = false;
-                if (event.getKeyCode() == KeyEvent.VK_DOWN || event.getKeyCode() == KeyEvent.VK_S) keyDown = false;
-                if (event.getKeyCode() == KeyEvent.VK_SPACE) Spacebar = false;
 
-            }
-            @Override
-            public void keyTyped(KeyEvent event) { }
-        });
-        frame.setVisible(true);
+    public JPanel getMainPanel(){
+        return mainPanel;
     }
 
-    public void resetGame() {
-        //lösche alles außer Hintergrund
-        Component[] components = gamePanel.getComponents();
-        for (Component component : components) {
-            if(component.getClass() != Background.class)
-                gamePanel.remove(component);
-        }
-        //füge Mond hinzu:
-        ImageIcon mIc = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Surface_Layer1.png")));
-        Bild moon = new Bild(0,gamePanel.getHeight()-mIc.getIconHeight()+ 10,gamePanel,mIc);
-        gamePanel.add(moon);
-
-        // Reset the score
-        aktScore = 0;
-        score.setText("0");
-
-        // Clear Figures
-        for (int i = 1; i < allFigures.size(); i++) {
-            Figur figure = allFigures.get(i);
-            gamePanel.remove(figure);
-            allFigures.remove(figure);
-        }
-
-        //Clear Helper
-        for (int i = 0; i < allHelper.size(); i++) {
-            Figur figure = allHelper.get(i);
-            gamePanel.remove(figure);
-            allHelper.remove(figure);
-        }
-
-        //Clear Bullets
-        for (int i = 0; i < allBullets.size(); i++) {
-            Figur figure = allBullets.get(i);
-            gamePanel.remove(figure);
-            allBullets.remove(figure);
-        }
-
-        // Reset the player spaceship
-        allFigures.get(0).reset(); // assuming you have a reset() method in the Player class
-        gamePanel.add(allFigures.get(0));
-        // Reset the health bar
-        healthBar.reset(); // assuming you have a reset() method in the HealthBar class
-        gamePanel.add(healthBar);
-        // Reset the asteroid count
-        anzAsteroiden = 1;
-
-        // Restart the timers
-        //exTimer.start();
-        myTimer.start();
-        bullTimer.start();
-        helperTimer.start();
-        powerUpSpawn.start();
-        astTimer.start();
-        astDelay = 10;
-
+    public void updateKeys(boolean keyLeft, boolean keyRight, boolean keyDown, boolean keyUp, boolean Spacebar){
+        GameGUI.keyLeft = keyLeft;
+        GameGUI.keyRight = keyRight;
+        GameGUI.keyDown = keyDown;
+        GameGUI.keyUp = keyUp;
+        GameGUI.Spacebar = Spacebar;
     }
-
 }
