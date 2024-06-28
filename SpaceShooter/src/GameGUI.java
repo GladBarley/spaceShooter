@@ -6,7 +6,7 @@ import java.awt.event.*;
 import java.util.Objects;
 
 public class GameGUI {
-
+    public JFrame frame;
     private JPanel mainPanel;
     private JPanel gamePanel;
     private JLabel score;
@@ -23,8 +23,8 @@ public class GameGUI {
     ArrayList<Helper> allHelper = new ArrayList<>();
     ArrayList<Bullet> allBullets = new ArrayList<>();
 
-    private static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
-
+    public static boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
+  
     private final Timer myTimer;
     private final Timer astTimer;
     private final Timer bullTimer;
@@ -40,13 +40,17 @@ public class GameGUI {
 
     private boolean debugimmortality = false;
 
+    Main main;
+    public GameGUI(Main main) {
+        this.main = main;
+      
     public int astDelay;
     private Timer astMove;
 
-    public GameGUI() {
         gamePanel.setBounds(0, 0, 800, 600);
         gamePanel.setLayout(null);
         scale = 2;
+        gamePanel.requestFocusInWindow();
 
         exTimer = new Timer(600, new ActionListener() {
             @Override
@@ -261,6 +265,8 @@ public class GameGUI {
 
         ImageIcon ic = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/explosion.gif")));
 
+        // Kollision Boden
+
         for (int e = 1; e < allFigures.size(); e++) {
             Figur curAst = checkMoonCollision(allFigures, e);
             if (curAst != null && !debugimmortality) {
@@ -271,6 +277,7 @@ public class GameGUI {
                     curAst.setImgIcon(ic);
                     gamePanel.add(curAst);
                     System.out.println("Kollision!!!");
+
                     break;
                 }
                 ImageIcon healthIC = healthBar.delHealth();
@@ -317,6 +324,7 @@ public class GameGUI {
         }
 
         int i = 0;
+        
         for (int e = 1; e < allFigures.size(); e++) {
             if (allFigures.get(e).collides(allFigures.get(i)) && !debugimmortality) {
                 delFig = allFigures.get(e);
@@ -324,6 +332,7 @@ public class GameGUI {
                     allFigures.get(e).setHit(true);
                     if (healthBar.getCount() >= healthBar.getHealth()) {
                         stopAllTimers();
+
                         gamePanel.remove(allFigures.get(e));
                         allFigures.get(e).setImgIcon(ic);
                         gamePanel.add(allFigures.get(e));
@@ -342,9 +351,40 @@ public class GameGUI {
                 }
                 break;
             }
+    }
+
+    public void gameOver(){
+        Component[] components = gamePanel.getComponents();
+
+        for (Component component : components) {
+            if(component.getClass() != Background.class) {
+                System.out.println(component.toString());
+                gamePanel.remove(component);
+            }
+        }
+        ImageIcon overIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Game_Over.png")));
+        JLabel overLabel = new JLabel(overIcon);
+        overLabel.setBounds(50,50, overIcon.getIconWidth(), overIcon.getIconHeight());
+        gamePanel.add(overLabel);
+
+        ImageIcon againIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Play_Again.png")));
+        JButton againButton = new JButton(againIcon);
+        againButton.setOpaque(false);
+        againButton.setContentAreaFilled(false);
+        //againButton.setBorderPainted(false);
+        againButton.setBounds(250,350, againIcon.getIconWidth(), againIcon.getIconHeight());
+        againButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                main.resetGame();
+            }
+        });
+        gamePanel.add(againButton);
+
         }
 
         gamePanel.repaint();
+
     }
 
     private void stopAllTimers() {
@@ -405,36 +445,17 @@ public class GameGUI {
         }
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Der wilde Space Shooter");
-        frame.setContentPane(new GameGUI().mainPanel);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setLocationRelativeTo(null);
-        frame.setVisible(true);
-        frame.setResizable(false);
-        frame.addKeyListener(new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_LEFT || event.getKeyCode() == KeyEvent.VK_A) keyLeft = true;
-                if (event.getKeyCode() == KeyEvent.VK_RIGHT || event.getKeyCode() == KeyEvent.VK_D) keyRight = true;
-                if (event.getKeyCode() == KeyEvent.VK_UP || event.getKeyCode() == KeyEvent.VK_W) keyUp = true;
-                if (event.getKeyCode() == KeyEvent.VK_DOWN || event.getKeyCode() == KeyEvent.VK_S) keyDown = true;
-                if (event.getKeyCode() == KeyEvent.VK_SPACE) Spacebar = true;
-            }
 
-            @Override
-            public void keyReleased(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_LEFT || event.getKeyCode() == KeyEvent.VK_A) keyLeft = false;
-                if (event.getKeyCode() == KeyEvent.VK_RIGHT || event.getKeyCode() == KeyEvent.VK_D) keyRight = false;
-                if (event.getKeyCode() == KeyEvent.VK_UP || event.getKeyCode() == KeyEvent.VK_W) keyUp = false;
-                if (event.getKeyCode() == KeyEvent.VK_DOWN || event.getKeyCode() == KeyEvent.VK_S) keyDown = false;
-                if (event.getKeyCode() == KeyEvent.VK_SPACE) Spacebar = false;
-            }
-
-            @Override
-            public void keyTyped(KeyEvent event) {}
-        });
-        frame.setVisible(true);
+    public JPanel getMainPanel(){
+        return mainPanel;
     }
+
+    public void updateKeys(boolean keyLeft, boolean keyRight, boolean keyDown, boolean keyUp, boolean Spacebar){
+        GameGUI.keyLeft = keyLeft;
+        GameGUI.keyRight = keyRight;
+        GameGUI.keyDown = keyDown;
+        GameGUI.keyUp = keyUp;
+        GameGUI.Spacebar = Spacebar;
+    }
+
 }

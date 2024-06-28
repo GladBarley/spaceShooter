@@ -53,4 +53,6 @@ public class Player extends Figur{
     }
 
 
+
+
 }
