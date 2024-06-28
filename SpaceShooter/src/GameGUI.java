@@ -39,18 +39,17 @@ public class GameGUI {
     private int scale;
 
     private boolean debugimmortality = false;
-
+    public int astDelay;
+    private Timer astMove;
     Main main;
     public GameGUI(Main main) {
         this.main = main;
       
-    public int astDelay;
-    private Timer astMove;
+
 
         gamePanel.setBounds(0, 0, 800, 600);
         gamePanel.setLayout(null);
         scale = 2;
-        gamePanel.requestFocusInWindow();
 
         exTimer = new Timer(600, new ActionListener() {
             @Override
@@ -272,11 +271,8 @@ public class GameGUI {
             if (curAst != null && !debugimmortality) {
                 curAst.setHit(true);
                 if (healthBar.getCount() >= 4) {
+                    gameOver();
                     stopAllTimers();
-                    gamePanel.remove(curAst);
-                    curAst.setImgIcon(ic);
-                    gamePanel.add(curAst);
-                    System.out.println("Kollision!!!");
 
                     break;
                 }
@@ -317,25 +313,21 @@ public class GameGUI {
                     allFigures.get(i).setImgIcon(ic);
                     gamePanel.add(allFigures.get(i));
                     allBullets.remove(e);
-                    System.out.println("Kollision!!!");
                     break;
                 }
             }
         }
 
         int i = 0;
-        
+
         for (int e = 1; e < allFigures.size(); e++) {
             if (allFigures.get(e).collides(allFigures.get(i)) && !debugimmortality) {
                 delFig = allFigures.get(e);
                 if (!allFigures.get(e).isHit()) {
                     allFigures.get(e).setHit(true);
                     if (healthBar.getCount() >= healthBar.getHealth()) {
+                        gameOver();
                         stopAllTimers();
-
-                        gamePanel.remove(allFigures.get(e));
-                        allFigures.get(e).setImgIcon(ic);
-                        gamePanel.add(allFigures.get(e));
                         break;
                     }
                     ImageIcon healthIC = healthBar.delHealth();
@@ -347,18 +339,16 @@ public class GameGUI {
                     gamePanel.remove(allFigures.get(e));
                     allFigures.get(e).setImgIcon(ic);
                     gamePanel.add(allFigures.get(e));
-                    System.out.println("Kollision!!!");
                 }
                 break;
             }
+        }
     }
-
     public void gameOver(){
         Component[] components = gamePanel.getComponents();
 
         for (Component component : components) {
             if(component.getClass() != Background.class) {
-                System.out.println(component.toString());
                 gamePanel.remove(component);
             }
         }
@@ -381,20 +371,14 @@ public class GameGUI {
         });
         gamePanel.add(againButton);
 
-        }
-
-        gamePanel.repaint();
-
     }
 
     private void stopAllTimers() {
         astTimer.stop();
         myTimer.stop();
         bullTimer.stop();
-        exTimer.restart();
         helperTimer.stop();
         powerUpSpawn.stop();
-        backgroundTimer.stop();
     }
 
     public void powerupCollision() {

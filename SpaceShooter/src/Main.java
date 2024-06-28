@@ -49,7 +49,6 @@ public class Main {
     }
 
     public void resetGame() {
-        System.out.println("RESETTET");
         frame = new JFrame("Der wilde Space Shooter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setResizable(false);
