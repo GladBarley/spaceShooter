@@ -149,6 +149,14 @@ public abstract class Figur extends JLabel {
 
     public void setSpeed(int speed){}
 
+    public void reset(){
+        x = 400;
+        y = 300;
+        xr = 0;
+        yr = 0;
+        this.setBounds(x,y,imgIcon.getIconWidth(),imgIcon.getIconHeight());
+    }
+
     //public int getWidth(){return imgIcon.getIconWidth();}
     //public int getHeight(){return imgIcon.getIconHeight();}
 }

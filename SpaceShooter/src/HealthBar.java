@@ -9,14 +9,23 @@ import javax.swing.ImageIcon;
 
 public class HealthBar extends Figur {
     private final ImageIcon healthBar;
+    private ImageIcon originalIcon;
     private int count;
     private int health;
-
+    private int originalhealth;
+    public void reset(){
+        health = originalhealth;
+        imgIcon = originalIcon;
+        this.setIcon(imgIcon);
+        this.setBounds(x, y, imgIcon.getIconWidth(), imgIcon.getIconHeight());
+    }
     public HealthBar(int x, int y, JPanel panel, ImageIcon imgIcon, int health) {
         super(x, y, panel, imgIcon, false);
         this.setIcon(imgIcon);
         this.setBounds(x, y, imgIcon.getIconWidth(), imgIcon.getIconHeight());
         this.health = health;
+        originalhealth = health;
+        originalIcon = imgIcon;
         healthBar = new ImageIcon(Objects.requireNonNull(getClass().getResource("img/UI/HealthBar.png")));
     }
 

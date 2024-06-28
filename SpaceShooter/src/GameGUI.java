@@ -14,7 +14,7 @@ import javax.swing.JLabel;
 
 
 public class GameGUI {
-
+    public static JFrame frame;
     private JPanel mainPanel;
     private JPanel gamePanel;
     private JLabel score;
@@ -401,9 +401,6 @@ public class GameGUI {
     }
 
     public void gameOver(){
-        allFigures.clear();
-        allHelper.clear();
-        allBullets.clear();
         //gamePanel.removeAll();
         Component[] components = gamePanel.getComponents();
 
@@ -418,7 +415,16 @@ public class GameGUI {
 
         ImageIcon againIcon = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Play_Again.png")));
         JButton againButton = new JButton(againIcon);
+        againButton.setOpaque(false);
+        againButton.setContentAreaFilled(false);
+        againButton.setBorderPainted(false);
         againButton.setBounds(250,350, againIcon.getIconWidth(), againIcon.getIconHeight());
+        againButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                resetGame();
+            }
+        });
         gamePanel.add(againButton);
     }
 
@@ -486,7 +492,7 @@ public class GameGUI {
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("Der wilde Space Shooter");
+        frame = new JFrame("Der wilde Space Shooter");
         frame.setContentPane(new GameGUI().mainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.pack();
@@ -516,6 +522,63 @@ public class GameGUI {
             public void keyTyped(KeyEvent event) { }
         });
         frame.setVisible(true);
+    }
+
+    public void resetGame() {
+        //lösche alles außer Hintergrund
+        Component[] components = gamePanel.getComponents();
+        for (Component component : components) {
+            if(component.getClass() != Background.class)
+                gamePanel.remove(component);
+        }
+        //füge Mond hinzu:
+        ImageIcon mIc = new ImageIcon(Objects.requireNonNull(getClass().getResource("/img/Surface_Layer1.png")));
+        Bild moon = new Bild(0,gamePanel.getHeight()-mIc.getIconHeight()+ 10,gamePanel,mIc);
+        gamePanel.add(moon);
+
+        // Reset the score
+        aktScore = 0;
+        score.setText("0");
+
+        // Clear Figures
+        for (int i = 1; i < allFigures.size(); i++) {
+            Figur figure = allFigures.get(i);
+            gamePanel.remove(figure);
+            allFigures.remove(figure);
+        }
+
+        //Clear Helper
+        for (int i = 0; i < allHelper.size(); i++) {
+            Figur figure = allHelper.get(i);
+            gamePanel.remove(figure);
+            allHelper.remove(figure);
+        }
+
+        //Clear Bullets
+        for (int i = 0; i < allBullets.size(); i++) {
+            Figur figure = allBullets.get(i);
+            gamePanel.remove(figure);
+            allBullets.remove(figure);
+        }
+
+        // Reset the player spaceship
+        allFigures.get(0).reset(); // assuming you have a reset() method in the Player class
+        gamePanel.add(allFigures.get(0));
+        // Reset the health bar
+        healthBar.reset(); // assuming you have a reset() method in the HealthBar class
+        gamePanel.add(healthBar);
+        // Reset the asteroid count
+        anzAsteroiden = 1;
+
+        // Restart the timers
+        //exTimer.start();
+        myTimer.start();
+        bullTimer.start();
+        helperTimer.start();
+        powerUpSpawn.start();
+        astTimer.start();
+        astDelay = 10;
+
     }
 
 }
