@@ -122,7 +122,7 @@ public class GameGUI {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int randInt = (int) (Math.random() * 10);
-                randInt = 2;
+                //randInt = 2;
                 ImageIcon powerIc;
                 int width, max, min, range, rx;
                 switch (randInt) {
