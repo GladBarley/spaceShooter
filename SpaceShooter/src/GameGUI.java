@@ -118,11 +118,11 @@ public class GameGUI {
         helperTimer.start();
 
         // Powerup Timer
-        powerUpSpawn = new Timer(6000, new ActionListener() {
+        powerUpSpawn = new Timer(4000, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int randInt = (int) (Math.random() * 10);
-                randInt = 2;
+                //randInt = 2;
                 ImageIcon powerIc;
                 int width, max, min, range, rx;
                 switch (randInt) {
@@ -151,7 +151,7 @@ public class GameGUI {
                 }
             }
         });
-        powerUpSpawn.setInitialDelay(6000);
+        powerUpSpawn.setInitialDelay(4000);
         powerUpSpawn.start();
 
         // Hintergrund Timer
@@ -299,10 +299,10 @@ public class GameGUI {
                 }
             }
         }
-
+        //Kollision Bullets Asteroid
         for (int i = 1; i < allFigures.size(); i++) {
             for (int e = 0; e < allBullets.size(); e++) {
-                if (allBullets.get(e).collides(allFigures.get(i)) && !allFigures.get(i).isHit()) {
+                if (allBullets.get(e).collides(allFigures.get(i)) && !allFigures.get(i).isHit() && allFigures.get(i).getClass() != HelperPowerup.class && allFigures.get(i).getClass() != Freeze.class) {
                     aktScore++;
                     allFigures.get(i).setHit(true);
                     score.setText(Integer.toString(aktScore));
@@ -319,7 +319,7 @@ public class GameGUI {
         }
 
         int i = 0;
-
+        //Kollision Rakete, Asteroiden
         for (int e = 1; e < allFigures.size(); e++) {
             if (allFigures.get(e).collides(allFigures.get(i)) && !debugimmortality) {
                 delFig = allFigures.get(e);
@@ -383,7 +383,7 @@ public class GameGUI {
 
     public void powerupCollision() {
         for (int i = 0; i < allFigures.size(); i++) {
-            if (allFigures.get(i).collides(allFigures.get(0)) && (new Freeze().getClass() == allFigures.get(i).getClass())) {
+            if (allFigures.get(i).collides(allFigures.get(0)) && (Freeze.class == allFigures.get(i).getClass())) {
                 gamePanel.remove(allFigures.get(i));
                 allFigures.remove(i);
 

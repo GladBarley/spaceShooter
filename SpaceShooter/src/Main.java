@@ -13,6 +13,7 @@ public class Main {
     private JFrame frame;
     private GameGUI gameGUI;
     boolean keyLeft, keyRight, keyDown, keyUp, Spacebar;
+    KeyListener keyListener;
 
     public Main() {
         frame = new JFrame("Der wilde Space Shooter");
@@ -22,7 +23,7 @@ public class Main {
         frame.setContentPane(gameGUI.getMainPanel());
         frame.pack();
         frame.setLocationRelativeTo(null);
-        KeyListener keyListener = new KeyListener() {
+        keyListener = new KeyListener() {
             @Override
             public void keyPressed(KeyEvent event) {
                 if (event.getKeyCode() == KeyEvent.VK_LEFT || event.getKeyCode() == KeyEvent.VK_A) keyLeft = true;
@@ -49,37 +50,14 @@ public class Main {
     }
 
     public void resetGame() {
-        frame = new JFrame("Der wilde Space Shooter");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
+        frame.getContentPane().removeAll();
         gameGUI = new GameGUI(this);
         frame.setContentPane(gameGUI.getMainPanel());
+        gameGUI.getMainPanel().addKeyListener(keyListener);
+        gameGUI.getMainPanel().requestFocusInWindow();
         frame.pack();
-        frame.setLocationRelativeTo(null);
-        KeyListener keyListener = new KeyListener() {
-            @Override
-            public void keyPressed(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_LEFT || event.getKeyCode() == KeyEvent.VK_A) keyLeft = true;
-                if (event.getKeyCode() == KeyEvent.VK_RIGHT || event.getKeyCode() == KeyEvent.VK_D) keyRight = true;
-                if (event.getKeyCode() == KeyEvent.VK_UP || event.getKeyCode() == KeyEvent.VK_W) keyUp = true;
-                if (event.getKeyCode() == KeyEvent.VK_DOWN || event.getKeyCode() == KeyEvent.VK_S) keyDown = true;
-                if (event.getKeyCode() == KeyEvent.VK_SPACE) Spacebar = true;
-                gameGUI.updateKeys(keyLeft, keyRight, keyDown, keyUp, Spacebar);
-            }
-            @Override
-            public void keyReleased(KeyEvent event) {
-                if (event.getKeyCode() == KeyEvent.VK_LEFT || event.getKeyCode() == KeyEvent.VK_A) keyLeft = false;
-                if (event.getKeyCode() == KeyEvent.VK_RIGHT || event.getKeyCode() == KeyEvent.VK_D) keyRight = false;
-                if (event.getKeyCode() == KeyEvent.VK_UP || event.getKeyCode() == KeyEvent.VK_W) keyUp = false;
-                if (event.getKeyCode() == KeyEvent.VK_DOWN || event.getKeyCode() == KeyEvent.VK_S) keyDown = false;
-                if (event.getKeyCode() == KeyEvent.VK_SPACE) Spacebar = false;
-                gameGUI.updateKeys(keyLeft, keyRight, keyDown, keyUp, Spacebar);
-            }
-            @Override
-            public void keyTyped(KeyEvent event) { }
-        };
-        frame.addKeyListener(keyListener);
-        frame.setVisible(true);
+        frame.revalidate();
+        frame.repaint();
     }
 
     public static void main(String[] args) {
